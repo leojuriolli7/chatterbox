@@ -1,15 +1,15 @@
 import { useParams } from "next/navigation";
+import { useMemo } from "react";
 
 export default function useGetActiveChat() {
   const params = useParams();
 
-  const getChatId = () => {
-    if (!params?.chatId) return "";
+  const chatId = useMemo(() => {
+    if (!params?.id) return "";
 
-    return params.chatId as string;
-  };
+    return params.id as string;
+  }, [params]);
 
-  const chatId = getChatId();
   const isOpen = !!chatId;
 
   return { isOpen, chatId };

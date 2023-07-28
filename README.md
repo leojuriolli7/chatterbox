@@ -1,6 +1,6 @@
 ## TODOS:
 
-1. Better error handling on register fetch call
+1. Better error handling on fetch calls
 2. Forgot password flow with nodemailer
 3. Delete messages
 4. Roles
