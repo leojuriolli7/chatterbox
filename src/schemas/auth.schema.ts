@@ -1,4 +1,4 @@
-import { requiredString } from "@/utils/required-string";
+import { requiredString } from "@/lib/required-string";
 import { z } from "zod";
 
 const PASSWORD_REGEX = /^(?=.*?[A-Z])(?=.*?[#?!@$%^&*-]).{8,}$/;
@@ -7,28 +7,23 @@ export const signUpSchema = z
   .object({
     name: requiredString.min(3, "Minimum of 3").max(30, "Maximum of 30"),
     email: requiredString.email(),
-    password: z.string().trim().min(8, "Minimum of 8 characters"),
+    password: z
+      .string()
+      .trim()
+      .min(8, "Minimum of 8 characters")
+      .refine(
+        (value) => {
+          const isStrongPassword = PASSWORD_REGEX.test(value);
+
+          return isStrongPassword;
+        },
+        { message: "Password too weak" }
+      ),
     confirmPassword: z.string().trim().min(8, "Minimum of 8 characters"),
   })
-  .superRefine(({ confirmPassword, password }, ctx) => {
-    if (confirmPassword !== password) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Passwords don't match",
-        path: ["confirmPassword"],
-      });
-    }
-  })
-  .superRefine(({ password }, ctx) => {
-    const isStrongPassword = PASSWORD_REGEX.test(password);
-
-    if (!isStrongPassword) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Password too weak",
-        path: ["password"],
-      });
-    }
+  .refine(({ password, confirmPassword }) => password === confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
   });
 
 export type SignUpInput = z.TypeOf<typeof signUpSchema>;

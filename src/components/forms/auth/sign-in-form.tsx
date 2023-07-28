@@ -168,7 +168,7 @@ export default function SignUpForm() {
             </div>
 
             <div className="relative flex justify-center text-sm">
-              <span className="bg-neutral-800 px-2 text-neutral-500 dark:text-neutral-400">
+              <span className="bg-white dark:bg-neutral-800 px-2 text-neutral-500 dark:text-neutral-400">
                 Or continue with
               </span>
             </div>

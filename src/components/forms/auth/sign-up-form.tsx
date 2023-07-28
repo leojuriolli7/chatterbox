@@ -72,7 +72,11 @@ export default function SignUpForm() {
 
   return (
     <Form {...methods}>
-      <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        autoComplete="false"
+        className="space-y-6"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <FormField
           control={control}
           name="name"
@@ -83,8 +87,9 @@ export default function SignUpForm() {
               <FormControl>
                 <Input
                   {...field}
-                  autoComplete="nope"
                   placeholder="Write a username..."
+                  // fool browsers to stop autocompleting.
+                  autoComplete="nope"
                   disabled={loading}
                 />
               </FormControl>
@@ -122,6 +127,8 @@ export default function SignUpForm() {
                 <Input
                   {...field}
                   placeholder="Write a password..."
+                  // fool browsers to stop autocompleting.
+                  autoComplete="new-password"
                   type="password"
                   disabled={loading}
                 />
@@ -170,7 +177,7 @@ export default function SignUpForm() {
             </div>
 
             <div className="relative flex justify-center text-sm">
-              <span className="bg-neutral-800 px-2 text-neutral-500 dark:text-neutral-400">
+              <span className="bg-white dark:bg-neutral-800 px-2 text-neutral-500 dark:text-neutral-400">
                 Or continue with
               </span>
             </div>

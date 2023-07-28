@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import prisma from "@/utils/prisma";
+import prisma from "@/lib/prisma";
 import { signUpSchema } from "@/schemas/auth.schema";
 import { NextResponse } from "next/server";
 

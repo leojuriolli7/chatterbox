@@ -6,4 +6,4 @@ import { z } from "zod";
  *
  * This means a string field that should be required is not going to be.
  */
-export const requiredString = z.string().trim().min(1, "Required");
+export const requiredString = z.string().trim().nonempty("Required");
