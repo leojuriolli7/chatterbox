@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import React from "react";
-import { BsCheckCircleFill, BsExclamationCircleFill } from "react-icons/bs";
+import { CheckCircle2, AlertCircle } from "lucide-react";
 
 type Props = {
   message: string;
@@ -23,13 +23,9 @@ const AuthFeedbackMessage = ({
           isError ? "bg-red-600" : "bg-green-500 dark:bg-green-600"
         )}
       >
-        {icon && isError && (
-          <BsExclamationCircleFill size={21} className="text-white" />
-        )}
+        {icon && isError && <AlertCircle size={21} className="text-white" />}
 
-        {icon && !isError && (
-          <BsCheckCircleFill size={21} className="text-white" />
-        )}
+        {icon && !isError && <CheckCircle2 size={21} className="text-white" />}
 
         <p>{message}</p>
       </div>

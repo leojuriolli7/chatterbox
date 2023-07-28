@@ -81,7 +81,7 @@ export default function SignUpForm() {
           });
         }
 
-        if (callback?.ok) {
+        if (callback?.ok && !callback?.error) {
           router.push("/");
         }
       })

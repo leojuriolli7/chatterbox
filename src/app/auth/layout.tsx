@@ -1,21 +1,20 @@
 import Image from "next/image";
 import Logo from "@/public/images/logo.webp";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import getServerSideSession from "../_actions/getServerSideSession";
 
 export default async function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSideSession();
 
   // route will only be accessible to unauthenticated users.
   if (!!session?.user) redirect("/");
 
   return (
-    <>
+    <div className="min-h-screen flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-100">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Image
           alt="Logo"
@@ -34,6 +33,6 @@ export default async function AuthLayout({
           {children}
         </div>
       </div>
-    </>
+    </div>
   );
 }

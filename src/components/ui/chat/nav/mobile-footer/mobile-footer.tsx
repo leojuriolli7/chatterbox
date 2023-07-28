@@ -1,0 +1,20 @@
+"use client";
+
+import useGetActiveChat from "@/hooks/useGetActiveChat";
+import useGetRoutes from "@/hooks/useGetRoutes";
+import Item from "./item";
+
+export default function MobileFooter() {
+  const routes = useGetRoutes();
+  const { isOpen } = useGetActiveChat();
+
+  if (isOpen) return null;
+
+  return (
+    <div className="fixed justify-between w-full bottom-0 z-40 flex items-center bg-white border-t lg:hidden">
+      {routes.map((route) => (
+        <Item {...route} key={route.label} />
+      ))}
+    </div>
+  );
+}
