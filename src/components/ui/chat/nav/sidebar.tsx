@@ -1,6 +1,6 @@
 import getCurrentUser from "@/app/_actions/getCurrentUser";
-import DesktopSidebar from "./desktop-sidebar/desktop-sidebar";
-import MobileFooter from "./mobile-footer/mobile-footer";
+import { DesktopNav } from "./desktop-nav";
+import { MobileNav } from "./mobile-nav";
 
 export default async function Sidebar({
   children,
@@ -11,8 +11,8 @@ export default async function Sidebar({
 
   return (
     <div className="h-full relative">
-      <DesktopSidebar currentUser={currentUser} />
-      <MobileFooter />
+      <DesktopNav currentUser={currentUser} />
+      <MobileNav />
       <main className="lg:pl-20 h-full">{children}</main>
     </div>
   );

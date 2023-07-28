@@ -3,9 +3,9 @@
 import useGetRoutes from "@/hooks/useGetRoutes";
 import Item from "./item";
 import type { User } from "@prisma/client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
 import ThemeSwitch from "@/components/ui/theme-switch";
+import ChatAvatar from "../../chat-avatar";
 
 type Props = {
   currentUser: User | null;
@@ -33,15 +33,10 @@ export default function DesktopSidebar({ currentUser }: Props) {
           <ThemeSwitch />
           <button
             type="button"
+            className="cursor-pointer hover:opacity-75 transition"
             onClick={toggleSettingsModal(true)}
-            className="cursor-pointer hover:opacity-75 transition relative"
           >
-            <Avatar>
-              <AvatarImage src={currentUser?.image || undefined} />
-              <AvatarFallback>{currentUser.name}</AvatarFallback>
-            </Avatar>
-
-            <span className="absolute block rounded-full bg-green-500 ring-2 ring-white top-0 left-0 w-2 h-2 md:h-3 md:w-3" />
+            <ChatAvatar name={currentUser.name} image={currentUser?.image} />
           </button>
         </nav>
       )}
