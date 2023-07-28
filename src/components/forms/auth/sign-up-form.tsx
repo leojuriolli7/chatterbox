@@ -170,7 +170,7 @@ export default function SignUpForm() {
             </div>
 
             <div className="relative flex justify-center text-sm">
-              <span className="bg-white px-2 text-neutral-500">
+              <span className="bg-neutral-800 px-2 text-neutral-500 dark:text-neutral-400">
                 Or continue with
               </span>
             </div>
@@ -184,7 +184,7 @@ export default function SignUpForm() {
         </div>
 
         <div className="mt-6 text-center">
-          <p className="text-sm text-neutral-500">
+          <p className="text-sm text-neutral-500 dark:text-neutral-400">
             Already have an account?{" "}
             <Link href="/auth/sign-in" className="underline text-blue-500">
               Click here to login
