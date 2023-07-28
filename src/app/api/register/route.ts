@@ -9,7 +9,7 @@ import { NextResponse } from "next/server";
  */
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body: unknown = await request.json();
 
     // parse and verify data again with zod
     const parseBody = signUpSchema.safeParse(body);

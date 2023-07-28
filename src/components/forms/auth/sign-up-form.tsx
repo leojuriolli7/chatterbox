@@ -1,6 +1,6 @@
 "use client";
 
-import { SignUpInput, signUpSchema } from "@/schemas/auth.schema";
+import { type SignUpInput, signUpSchema } from "@/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import GithubButton from "@/components/ui/github-button";
 import Link from "next/link";
-import { toast, useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/useToast";
 import { signIn } from "next-auth/react";
 
 export default function SignUpForm() {

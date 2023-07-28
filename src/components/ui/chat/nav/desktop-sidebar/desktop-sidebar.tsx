@@ -12,7 +12,7 @@ type Props = {
 
 export default function DesktopSidebar({ currentUser }: Props) {
   const routes = useGetRoutes();
-  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+  const [_settingsModalOpen, setSettingsModalOpen] = useState(false);
 
   const toggleSettingsModal = (value: boolean) => () =>
     setSettingsModalOpen(value);
@@ -31,7 +31,7 @@ export default function DesktopSidebar({ currentUser }: Props) {
         <nav className="mt-4 flex flex-col justify-between items-center">
           <button
             type="button"
-            onClick={() => setSettingsModalOpen(true)}
+            onClick={toggleSettingsModal(true)}
             className="cursor-pointer hover:opacity-75 transition relative"
           >
             <Avatar>

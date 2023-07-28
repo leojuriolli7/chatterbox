@@ -1,6 +1,6 @@
 "use client";
 
-import { SignInInput, signInSchema } from "@/schemas/auth.schema";
+import { type SignInInput, signInSchema } from "@/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import GithubButton from "@/components/ui/github-button";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/useToast";
 import AuthFeedbackMessage from "@/components/ui/auth-feedback-message";
 
 type SignInErrorTypes =

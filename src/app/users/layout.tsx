@@ -1,6 +1,6 @@
 import Sidebar from "@/components/ui/chat/nav/sidebar";
 
-export default async function UsersLayout({
+export default function UsersLayout({
   children,
 }: {
   children: React.ReactNode;

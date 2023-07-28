@@ -1,4 +1,3 @@
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import EmptyState from "@/components/ui/chat/empty-state";
 import getServerSideSession from "../_actions/getServerSideSession";
