@@ -12,7 +12,8 @@ export default function useGetOtherUser(
   const otherUser = useMemo(() => {
     const currentUserEmail = session?.user?.email;
 
-    return chat.users.find((user) => user.email !== currentUserEmail);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return chat.users.find((user) => user.email !== currentUserEmail)!;
   }, [session?.user?.email, chat]);
 
   return otherUser;

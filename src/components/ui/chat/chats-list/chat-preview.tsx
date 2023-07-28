@@ -52,10 +52,7 @@ export default function ChatPreview({ selected, ...chat }: Props) {
           selected ? "bg-neutral-100" : "bg-white"
         )}
       >
-        <ChatAvatar
-          name={otherUser?.name as string}
-          image={otherUser?.image as string}
-        />
+        <ChatAvatar name={otherUser?.name} image={otherUser?.image} />
 
         <div className="min-w-0 flex-1">
           <div className="focus:outline-none">

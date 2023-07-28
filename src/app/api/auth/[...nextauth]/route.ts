@@ -9,6 +9,7 @@ export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
   pages: {
     signIn: "/auth/sign-in",
+    error: "/auth/error",
   },
   providers: [
     GithubProvider({

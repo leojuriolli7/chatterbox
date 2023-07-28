@@ -34,10 +34,7 @@ export default function Header(chat: Props) {
           <ChevronLeft className="h-8 w-8" />
         </Link>
 
-        <ChatAvatar
-          name={otherUser?.name as string}
-          image={otherUser?.image as string}
-        />
+        <ChatAvatar name={otherUser?.name} image={otherUser?.image} />
 
         <div className="flex flex-col">
           <h3 className="line-clamp-1 max-w-[600px] break-words">
