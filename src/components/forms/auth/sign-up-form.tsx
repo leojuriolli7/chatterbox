@@ -36,6 +36,7 @@ export default function SignUpForm() {
       method: "POST",
       body: JSON.stringify(values),
     })
+      // to-do: better error handling here
       .then(() =>
         signIn("credentials", {
           email: values.email,

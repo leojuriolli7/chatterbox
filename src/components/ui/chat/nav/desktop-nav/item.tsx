@@ -13,7 +13,7 @@ export default function Item({
     <li onClick={onClick}>
       <Link
         className={cn(
-          "group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold text-neutral-500 hover:text-black hover:bg-neutral-100 dark:hover:text-white dark:hover:bg-neutral-600",
+          "group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold text-neutral-500 hover:text-black hover:bg-neutral-100 dark:hover:text-white dark:hover:bg-neutral-600 transition-colors",
           active &&
             "bg-neutral-100 text-black fill-black dark:bg-neutral-600 dark:fill-white dark:text-white"
         )}

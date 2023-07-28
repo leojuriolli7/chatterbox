@@ -1,4 +1,7 @@
 ## TODOS:
 
-1. Finish chat
+1. Better error handling on register fetch call
 2. Forgot password flow with nodemailer
+3. Delete messages
+4. Roles
+5. Infinite scrolling inside chats and on user/chat list

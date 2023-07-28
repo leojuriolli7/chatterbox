@@ -3,7 +3,7 @@ import TalkingImage from "@/public/images/talking.webp";
 
 export default function EmptyState() {
   return (
-    <div className="px-4 py-10 sm:px-6 lg:px-8 flex justify-center h-full bg-white border-l border-neutral-200 dark:border-neutral-800 dark:bg-neutral-900 select-none">
+    <div className="px-4 py-10 sm:px-6 lg:px-8 flex justify-center h-full bg-white border-r border-neutral-200 dark:border-neutral-800 dark:bg-neutral-900 select-none">
       <div className="text-center item-center flex flex-col mt-16">
         <Image
           src={TalkingImage}

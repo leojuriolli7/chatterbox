@@ -20,7 +20,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, "h-screen max-w-[1920px] mx-auto")}>
+      <body
+        className={cn(
+          inter.className,
+          "h-screen max-w-[1920px] mx-auto bg-white dark:bg-neutral-900"
+        )}
+      >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <AuthProvider>
             {children}

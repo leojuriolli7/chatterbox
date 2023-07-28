@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     const parseBody = signUpSchema.safeParse(body);
 
     if (!parseBody.success) {
-      return new NextResponse("Missing information", { status: 400 });
+      return new NextResponse("Invalid information", { status: 400 });
     } else {
       const { email, password, name } = parseBody.data;
       const hashedPassword = await bcrypt.hash(password, 12);
