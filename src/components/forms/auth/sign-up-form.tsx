@@ -1,0 +1,197 @@
+"use client";
+
+import { SignUpInput, signUpSchema } from "@/schemas/auth.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import GithubButton from "@/components/ui/github-button";
+import Link from "next/link";
+import { toast, useToast } from "@/components/ui/use-toast";
+import { signIn } from "next-auth/react";
+
+export default function SignUpForm() {
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+
+  const methods = useForm<SignUpInput>({
+    resolver: zodResolver(signUpSchema),
+  });
+
+  const { control, handleSubmit } = methods;
+
+  const onSubmit = (values: SignUpInput) => {
+    setLoading(true);
+    fetch("/api/register", {
+      method: "POST",
+      body: JSON.stringify(values),
+    })
+      .then(() =>
+        signIn("credentials", {
+          email: values.email,
+          password: values.password,
+          callbackUrl: "/",
+        })
+      )
+      .catch(() => {
+        toast({
+          title: "Something went wrong.",
+          variant: "destructive",
+        });
+      })
+      .finally(() => setLoading(false));
+  };
+
+  const signUpWithGithub = () => {
+    setLoading(true);
+    signIn("github", {
+      redirect: false,
+    })
+      .then((callback) => {
+        if (callback?.error) {
+          toast({
+            title: "Could not sign up with Github.",
+            description: callback?.error || "Internal error ocurred.",
+          });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  return (
+    <Form {...methods}>
+      <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <FormField
+          control={control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormMessage />
+              <FormControl>
+                <Input
+                  {...field}
+                  autoComplete="nope"
+                  placeholder="Write a username..."
+                  disabled={loading}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>E-mail</FormLabel>
+              <FormMessage />
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder="Write an email..."
+                  type="email"
+                  disabled={loading}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormMessage />
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder="Write a password..."
+                  type="password"
+                  disabled={loading}
+                />
+              </FormControl>
+
+              <FormDescription>
+                Minimum of 8 characters, 1 special character and 1 capital
+                letter
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirm password</FormLabel>
+              <FormMessage />
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder="Confirm your password..."
+                  type="password"
+                  disabled={loading}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <Button
+          className="w-full"
+          type="submit"
+          variant="brand"
+          loading={loading}
+        >
+          Sign up
+        </Button>
+
+        <div className="mt-6">
+          <div className="relative">
+            <div className="absolute inset-0 items-center flex">
+              <div className="w-full border-t border-neutral-400" />
+            </div>
+
+            <div className="relative flex justify-center text-sm">
+              <span className="bg-white px-2 text-neutral-500">
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          <GithubButton
+            onClick={signUpWithGithub}
+            className="mt-4"
+            loading={loading}
+          />
+        </div>
+
+        <div className="mt-6 text-center">
+          <p className="text-sm text-neutral-500">
+            Already have an account?{" "}
+            <Link href="/auth/sign-in" className="underline text-blue-500">
+              Click here to login
+            </Link>
+          </p>
+        </div>
+      </form>
+    </Form>
+  );
+}
