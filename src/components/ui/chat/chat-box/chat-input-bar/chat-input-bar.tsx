@@ -30,6 +30,10 @@ export default function ChatInputBar() {
     },
   });
 
+  const { watch } = methods;
+  const message = watch("message");
+  const files = watch("files");
+
   const onSubmit = (values: CreateMessageInput) => {
     if (!values.files?.length && !values.message) return;
     if (loading) return;
@@ -85,6 +89,7 @@ export default function ChatInputBar() {
             loading={loading}
             className="h-9 w-9 bg-blue-500 hover:bg-blue-600 transition rounded-full shrink-0"
             loaderClasses="text-white"
+            disabled={!message && !files?.length}
           >
             <SendHorizonal className="text-white h-5 w-5" />
           </Button>

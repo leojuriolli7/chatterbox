@@ -1,5 +1,5 @@
+import { authOptions } from "@/lib/auth-options";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 
 // wrapper around `getServerSession` to avoid having
 // to pass `authOptions` every time.

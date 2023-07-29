@@ -3,10 +3,12 @@ import getMessages from "@/app/_actions/getMessages";
 import { ChatInputBar, ChatBox, Header } from "@/components/ui/chat/chat-box";
 
 type RouteParams = {
-  id: string;
+  params: {
+    id: string;
+  };
 };
 
-export default async function SingleChatPage({ id }: RouteParams) {
+export default async function SingleChatPage({ params: { id } }: RouteParams) {
   // parallel fetching for faster results.
   const [chat, _messages] = await Promise.all([
     getChatById(id),
