@@ -4,11 +4,15 @@ import useGetActiveChat from "@/hooks/useGetActiveChat";
 import { cn } from "@/lib/utils";
 import type { ChatWithMessagesAndUsers } from "@/types";
 import { UserPlus2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ChatPreview from "./chat-preview";
 import type { User } from "@prisma/client";
 import CreateGroupDialogContent from "./create-group-dialog";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { pusherClient } from "@/lib/pusher";
+import find from "lodash.find";
 
 type Props = {
   initialChats: ChatWithMessagesAndUsers[];
@@ -17,9 +21,63 @@ type Props = {
 
 export default function ChatsList({ initialChats, users }: Props) {
   const { isOpen, chatId } = useGetActiveChat();
+  const { data: session } = useSession();
+  const router = useRouter();
 
-  const [chats, _setChats] = useState(initialChats);
+  const [chats, setChats] = useState(initialChats);
   const [createGroupOpen, setCreateGroupOpen] = useState(false);
+
+  const pusherKey = session?.user?.email;
+
+  useEffect(() => {
+    if (!pusherKey) return;
+
+    pusherClient.subscribe(pusherKey);
+
+    const newHandler = (newChat: ChatWithMessagesAndUsers) => {
+      setChats((currentChats) => {
+        if (find(currentChats, { id: chatId })) {
+          return currentChats;
+        }
+
+        return [newChat, ...currentChats];
+      });
+    };
+
+    const updateHandler = (newChat: ChatWithMessagesAndUsers) => {
+      setChats((current) =>
+        current.map((oldChat) => {
+          if (oldChat.id === newChat.id) {
+            return {
+              ...oldChat,
+              messages: newChat.messages,
+            };
+          }
+
+          return oldChat;
+        })
+      );
+    };
+
+    const removeHandler = (deletedChat: ChatWithMessagesAndUsers) => {
+      setChats((current) => [
+        ...current.filter((chat) => chat.id !== deletedChat.id),
+      ]);
+
+      if (chatId === deletedChat.id) router.push("/chats");
+    };
+
+    pusherClient.bind("chat:new", newHandler);
+    pusherClient.bind("chat:update", updateHandler);
+    pusherClient.bind("chat:remove", removeHandler);
+
+    return () => {
+      pusherClient.unsubscribe(pusherKey);
+      pusherClient.unbind("chat:new", newHandler);
+      pusherClient.unbind("chat:update", updateHandler);
+      pusherClient.unbind("chat:remove", removeHandler);
+    };
+  }, [chatId, pusherKey, router]);
 
   return (
     <aside

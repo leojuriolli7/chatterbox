@@ -1,6 +1,7 @@
 import getCurrentUser from "@/app/_actions/getCurrentUser";
 import { createMessageSchema } from "@/schemas/chat.schema";
 import { NextResponse } from "next/server";
+import { pusherServer } from "@/lib/pusher";
 
 export async function POST(request: Request) {
   try {
@@ -53,8 +54,7 @@ export async function POST(request: Request) {
       },
     });
 
-    // will be used with pusher later
-    const _updatedChat = await prisma?.chat.update({
+    const updatedChat = await prisma?.chat.update({
       where: {
         id: chatId,
       },
@@ -75,6 +75,17 @@ export async function POST(request: Request) {
           },
         },
       },
+    });
+
+    await pusherServer.trigger(chatId, "messages:new", newMessage);
+
+    const lastMessage = updatedChat?.messages.at(-1);
+
+    updatedChat?.users.map((user) => {
+      void pusherServer.trigger(user.email as string, "chat:update", {
+        id: chatId,
+        messages: [lastMessage],
+      });
     });
 
     return NextResponse.json(newMessage);

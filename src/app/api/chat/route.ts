@@ -1,5 +1,6 @@
 import getCurrentUser from "@/app/_actions/getCurrentUser";
 import prisma from "@/lib/prisma";
+import { pusherServer } from "@/lib/pusher";
 import {
   getOrCreateDMSchema,
   serverCreateGroupSchema,
@@ -57,6 +58,12 @@ export async function POST(request: Request) {
         },
       });
 
+      newGroupChat.users.forEach((user) => {
+        if (user.email) {
+          void pusherServer.trigger(user.email, "chat:new", newGroupChat);
+        }
+      });
+
       return NextResponse.json(newGroupChat);
     }
 
@@ -94,6 +101,12 @@ export async function POST(request: Request) {
           include: {
             users: true,
           },
+        });
+
+        newDM.users.forEach((user) => {
+          if (user.email) {
+            void pusherServer.trigger(user.email, "chat:new", newDM);
+          }
         });
 
         return NextResponse.json(newDM);

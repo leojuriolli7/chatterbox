@@ -1,13 +1,14 @@
 import getCurrentUser from "@/app/_actions/getCurrentUser";
 import prisma from "@/lib/prisma";
+import { pusherServer } from "@/lib/pusher";
 import { NextResponse } from "next/server";
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { chatId: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { chatId } = params;
+    const { id: chatId } = params;
     const currentUser = await getCurrentUser();
 
     if (!currentUser?.id) {
@@ -34,6 +35,12 @@ export async function DELETE(
           hasSome: [currentUser.id],
         },
       },
+    });
+
+    existingChat.users.forEach((user) => {
+      if (user.email) {
+        void pusherServer.trigger(user.email, "chat:remove", existingChat);
+      }
     });
 
     return NextResponse.json(deletedChat);

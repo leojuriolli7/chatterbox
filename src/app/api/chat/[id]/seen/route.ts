@@ -1,16 +1,17 @@
 import getCurrentUser from "@/app/_actions/getCurrentUser";
 import prisma from "@/lib/prisma";
+import { pusherServer } from "@/lib/pusher";
 import { NextResponse } from "next/server";
 
 type Params = {
-  chatId: string;
+  id: string;
 };
 
 export async function POST(request: Request, { params }: { params: Params }) {
   try {
     const currentUser = await getCurrentUser();
 
-    const { chatId } = params;
+    const { id: chatId } = params;
 
     if (!currentUser?.id)
       return new NextResponse("Unauthorized", { status: 401 });
@@ -52,6 +53,20 @@ export async function POST(request: Request, { params }: { params: Params }) {
         },
       },
     });
+
+    if (!!currentUser?.email) {
+      await pusherServer.trigger(currentUser.email, "chat:update", {
+        id: chatId,
+        messages: [updatedMessage],
+      });
+    }
+
+    // check if already read message
+    if (lastMessage.seenIds.indexOf(currentUser.id) !== -1) {
+      return NextResponse.json(chat);
+    }
+
+    await pusherServer.trigger(chatId, "message:update", updatedMessage);
 
     return NextResponse.json(updatedMessage);
   } catch (e) {

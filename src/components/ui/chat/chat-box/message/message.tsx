@@ -21,7 +21,7 @@ export default function Message({
 }: Props) {
   const { data: session } = useSession();
   const isOwnMessage = session?.user?.email === sender.email;
-  const hasFiles = !!files.length;
+  const hasFiles = !!files?.length;
 
   /**
    * Takes the `seen` object and transforms into list of users
