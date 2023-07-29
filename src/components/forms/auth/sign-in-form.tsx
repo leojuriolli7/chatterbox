@@ -57,7 +57,7 @@ export default function SignUpForm() {
   const router = useRouter();
   const params = useParams();
 
-  const errorType = params.error as SignInErrorTypes;
+  const errorType = params?.error as SignInErrorTypes;
   const error = errorType && (errors[errorType] ?? errors.default);
 
   const methods = useForm<SignInInput>({

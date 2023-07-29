@@ -20,7 +20,7 @@ export default function useGetRoutes() {
         label: "Chat",
         href: "/chats",
         icon: MessagesSquare,
-        active: pathname.includes("/chats"),
+        active: pathname?.includes("/chats"),
       },
       {
         label: "Users",
