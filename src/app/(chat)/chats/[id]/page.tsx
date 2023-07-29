@@ -10,7 +10,7 @@ type RouteParams = {
 
 export default async function SingleChatPage({ params: { id } }: RouteParams) {
   // parallel fetching for faster results.
-  const [chat, _messages] = await Promise.all([
+  const [chat, messages] = await Promise.all([
     getChatById(id),
     getMessages(id),
   ]);
@@ -21,7 +21,7 @@ export default async function SingleChatPage({ params: { id } }: RouteParams) {
     <div className="lg:pl-80 h-full">
       <div className="h-full flex flex-col">
         <Header {...chat} />
-        <ChatBox />
+        <ChatBox initialMessages={messages} />
         <ChatInputBar />
       </div>
     </div>

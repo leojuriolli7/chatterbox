@@ -1,6 +1,6 @@
 import type { Chat, File, Message, User } from "@prisma/client";
 
-export type MessageWithStatus = Message & {
+export type FullMessage = Message & {
   sender: User;
   seen: User[];
   files: File[];
@@ -8,5 +8,5 @@ export type MessageWithStatus = Message & {
 
 export type ChatWithMessagesAndUsers = Chat & {
   users: User[];
-  messages: MessageWithStatus[];
+  messages: FullMessage[];
 };

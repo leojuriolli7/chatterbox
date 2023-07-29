@@ -47,9 +47,10 @@ export default function ChatPreview({ selected, ...chat }: Props) {
   return (
     <Link href={`/chats/${id}`}>
       <div
+        aria-current={selected}
         className={cn(
           "w-full relative flex items-center border border-neutral-200 dark:border-neutral-800 space-x-3 bg-white dark:bg-neutral-925 p-3 hover:bg-neutral-100 dark:hover:bg-neutral-800/60 rounded-lg transition",
-          selected ? "bg-neutral-100" : "bg-white"
+          selected ? "bg-neutral-100 dark:bg-neutral-800/60" : "bg-white"
         )}
       >
         <ChatAvatar name={otherUser?.name} image={otherUser?.image} />
