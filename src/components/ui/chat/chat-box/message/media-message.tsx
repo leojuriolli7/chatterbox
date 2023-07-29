@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import type { File } from "@prisma/client";
 import { Play } from "lucide-react";
 import Image from "next/image";
@@ -20,100 +21,48 @@ export default function MediaMessage({ files }: { files: File[] }) {
   const isImage = (file: File) => file.type === "image";
   const isVideo = (file: File) => file.type === "video";
 
-  if (numberOfFiles === 1 && isImage(files[0]))
-    return (
-      <Image
-        src={files[0].url}
-        alt="User uploaded image"
-        width={256}
-        height={256}
-        className={singleMediaClass}
-      />
-    );
+  return (
+    <div
+      className={cn(
+        numberOfFiles === 3 && "flex gap-2 items-center flex-wrap",
+        numberOfFiles === 4 && "grid grid-cols-2 grid-rows-2 gap-2"
+      )}
+    >
+      {files.map((file) => {
+        const isSingleMedia = numberOfFiles === 1;
 
-  if (numberOfFiles === 1 && isVideo(files[0]))
-    return (
-      <VideoWrapper>
-        <video
-          src={files[0].url}
-          width={256}
-          height={256}
-          className={singleMediaClass}
-        />
-      </VideoWrapper>
-    );
+        const mediaClassName = isSingleMedia
+          ? singleMediaClass
+          : mediumMediaClass;
 
-  if (numberOfFiles === 2 || numberOfFiles === 3) {
-    return (
-      <div className="flex gap-2 items-center flex-wrap">
-        {files.map((file) => {
-          if (isImage(file)) {
-            return (
-              <Image
+        const dimensions = isSingleMedia ? 256 : 128;
+
+        if (isImage(file)) {
+          return (
+            <Image
+              key={file.id}
+              src={file.url}
+              alt="User uploaded image"
+              width={dimensions}
+              height={dimensions}
+              className={mediaClassName}
+            />
+          );
+        }
+
+        if (isVideo(file)) {
+          return (
+            <VideoWrapper key={file.id}>
+              <video
                 src={file.url}
-                key={file.id}
-                alt="User uploaded image"
-                width={128}
-                height={128}
-                className={mediumMediaClass}
+                width={dimensions}
+                height={dimensions}
+                className={mediaClassName}
               />
-            );
-          }
-
-          if (isVideo(file)) {
-            return (
-              <VideoWrapper key={file.id}>
-                <video
-                  src={files[0].url}
-                  width={128}
-                  height={128}
-                  className={mediumMediaClass}
-                />
-              </VideoWrapper>
-            );
-          }
-
-          return null;
-        })}
-      </div>
-    );
-  }
-
-  if (numberOfFiles === 4) {
-    return (
-      <div className="grid grid-cols-2 grid-rows-2 gap-2">
-        {files.map((file) => {
-          if (isImage(file)) {
-            return (
-              <Image
-                src={file.url}
-                alt="User uploaded image"
-                width={128}
-                height={128}
-                key={file.id}
-                className={mediumMediaClass}
-              />
-            );
-          }
-
-          if (isVideo(file)) {
-            return (
-              <VideoWrapper key={file.id}>
-                <video
-                  src={files[0].url}
-                  width={128}
-                  height={128}
-                  className={mediumMediaClass}
-                />
-              </VideoWrapper>
-            );
-          }
-
-          return null;
-        })}
-      </div>
-    );
-  }
-
-  return null;
+            </VideoWrapper>
+          );
+        }
+      })}
+    </div>
+  );
 }
