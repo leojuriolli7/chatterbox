@@ -1,32 +1,38 @@
 "use client";
 
 import { useToast } from "@/hooks/useToast";
-import type { CreateMessageInput } from "@/schemas/chat.schema";
-import { ImagePlus } from "lucide-react";
+import { useUploadThing } from "@/lib/upload-thing";
+import { cn } from "@/lib/utils";
+import type { CreateMessageInput, FileToUpload } from "@/schemas/chat.schema";
+import { ImagePlus, Loader2 } from "lucide-react";
 import type { ChangeEvent } from "react";
 import { useFormContext } from "react-hook-form";
-import { v4 as uuidv4 } from "uuid";
 
-export interface FileWithPath extends File {
-  localFilePath?: string;
-  id?: string;
-}
+type Props = {
+  loadingState: [boolean, React.Dispatch<boolean>];
+};
 
-export default function UploadButton() {
+export default function UploadButton({ loadingState }: Props) {
+  const [loading, setLoading] = loadingState;
+
   const { toast } = useToast();
   const { setValue, watch } = useFormContext<CreateMessageInput>();
-  const filesValue = watch("files") as File[];
 
-  const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const { startUpload: startImagesUpload } = useUploadThing("imageUploader");
+  const { startUpload: startVideosUpload } = useUploadThing("videoUploader");
+
+  const filesValue = watch("files");
+
+  const onFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     const numberOfFilesSelected = files?.length;
 
     if (!numberOfFilesSelected) return;
 
-    if (
-      numberOfFilesSelected > 4 ||
-      numberOfFilesSelected + filesValue?.length > 4
-    ) {
+    const tooManyFiles =
+      !!filesValue && numberOfFilesSelected + filesValue?.length > 4;
+
+    if (numberOfFilesSelected > 4 || tooManyFiles) {
       return toast({
         title: "Maximum of 4 files per message.",
         variant: "destructive",
@@ -53,19 +59,50 @@ export default function UploadButton() {
 
     if (fileTooBig) return toast({ title: "Maximum size per file is 10MB" });
 
-    const arrayToSend = filesArray.map((file: FileWithPath) => {
-      file = new File([file], file.name, { type: file.type });
-      file.localFilePath = URL.createObjectURL(file);
-      file.id = uuidv4();
+    // if files array is valid, we start uploading.
+    setLoading(true);
 
-      return file;
-    });
+    const videos = filesArray?.filter((f) => f?.type?.includes("video"));
+    const images = filesArray?.filter((f) => f?.type?.includes("image"));
 
-    return setValue("files", [...(filesValue || []), ...arrayToSend]);
+    let filesToUpload: FileToUpload[] = [];
+
+    let videosPromise;
+    let imagesPromise;
+
+    if (!!videos?.length) videosPromise = startVideosUpload(videos);
+    if (!!images?.length) imagesPromise = startImagesUpload(images);
+
+    const [uploadedVideos, uploadedImages] = await Promise.all([
+      videosPromise,
+      imagesPromise,
+    ]);
+
+    if (!!uploadedVideos?.length) {
+      const formattedVideos: FileToUpload[] = uploadedVideos?.map((v) => ({
+        url: v.fileUrl,
+        type: "video",
+      }));
+
+      filesToUpload = [...formattedVideos];
+    }
+
+    if (!!uploadedImages?.length) {
+      const formattedImages: FileToUpload[] = uploadedImages?.map((i) => ({
+        url: i.fileUrl,
+        type: "image",
+      }));
+
+      filesToUpload = [...filesToUpload, ...formattedImages];
+    }
+
+    setLoading(false);
+
+    setValue("files", [...(filesValue || []), ...filesToUpload]);
   };
 
   return (
-    <label className="cursor-pointer">
+    <label className="cursor-pointer hover:scale-110 transition">
       <input
         onChange={onFileChange}
         name="files"
@@ -74,8 +111,13 @@ export default function UploadButton() {
         max={4}
         accept="video/*, image/*"
         multiple
+        disabled={loading}
       />
-      <ImagePlus className="h-7 w-7 text-blue-500" />
+      {loading ? (
+        <Loader2 className="w-7 h-7 animate-spin opacity-50 text-blue-500" />
+      ) : (
+        <ImagePlus className={cn("h-7 w-7 text-blue-500")} />
+      )}
     </label>
   );
 }

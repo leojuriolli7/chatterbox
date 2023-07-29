@@ -1,41 +1,44 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import type { CreateMessageInput } from "@/schemas/chat.schema";
-import type { FileWithPath } from "./upload-button";
+import type { CreateMessageInput, FileToUpload } from "@/schemas/chat.schema";
 import Image from "next/image";
 import { X as CloseIcon } from "lucide-react";
 
-const isImage = (file: File) => file.type.includes("image");
-const isVideo = (file: File) => file.type.includes("video");
+const isImage = (file: FileToUpload) => file.type.includes("image");
+const isVideo = (file: FileToUpload) => file.type.includes("video");
 
-export default function FilesPreview() {
+export default function FilesPreview({ loading }: { loading: boolean }) {
   const { watch, setValue } = useFormContext<CreateMessageInput>();
-  const files = watch("files") as FileWithPath[];
+  const files = watch("files");
 
   const onClickDeleteFile = (id?: string) => () => {
-    setValue(
-      "files",
-      files.filter((file) => file.id !== id)
-    );
+    if (!!files?.length) {
+      setValue(
+        "files",
+        files.filter((file) => file.url !== id)
+      );
+    }
   };
 
   return files?.length ? (
     <div className="absolute bottom-[70px] left-0 w-full py-4 flex justify-center gap-3 items-center bg-white dark:bg-neutral-800 border-t dark:border-b dark:border-neutral-700">
       {files.map((file) => (
-        <div key={file.id} className="relative shrink-0">
-          <button
-            className="absolute -top-2 -right-2 bg-white dark:bg-neutral-900 dark:border-neutral-700 border rounded-full w-8 h-8 flex justify-center items-center z-20"
-            type="button"
-            onClick={onClickDeleteFile(file.id)}
-          >
-            <span className="sr-only">Remove this image</span>
-            <CloseIcon className="w-5 h-5" />
-          </button>
+        <div key={file.url} className="relative shrink-0">
+          {!loading && (
+            <button
+              className="absolute -top-2 -right-2 bg-white dark:bg-neutral-900 dark:border-neutral-700 border rounded-full w-8 h-8 flex justify-center items-center z-20 hover:scale-110 transition"
+              type="button"
+              onClick={onClickDeleteFile(file.url)}
+            >
+              <span className="sr-only">Remove this image</span>
+              <CloseIcon className="w-5 h-5" />
+            </button>
+          )}
           {isImage(file) && (
             <Image
               unoptimized
-              src={file.localFilePath as string}
+              src={file.url}
               alt="Uploaded image"
               width={80}
               height={80}
@@ -45,7 +48,7 @@ export default function FilesPreview() {
 
           {isVideo(file) && (
             <video
-              src={file.localFilePath as string}
+              src={file.url}
               muted
               width={80}
               height={80}

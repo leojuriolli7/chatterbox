@@ -1,5 +1,5 @@
 import getCurrentUser from "@/app/_actions/getCurrentUser";
-import { serverCreateMessageInput } from "@/schemas/chat.schema";
+import { createMessageSchema } from "@/schemas/chat.schema";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -11,7 +11,7 @@ export async function POST(request: Request) {
 
     const body: unknown = await request.json();
 
-    const bodyParsing = serverCreateMessageInput.safeParse(body);
+    const bodyParsing = createMessageSchema.safeParse(body);
 
     if (!bodyParsing.success) {
       return new NextResponse("Invalid data", { status: 400 });

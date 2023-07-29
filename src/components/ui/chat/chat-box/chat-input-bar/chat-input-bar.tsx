@@ -7,7 +7,6 @@ import useGetActiveChat from "@/hooks/useGetActiveChat";
 import {
   type CreateMessageInput,
   createMessageSchema,
-  type FileToUpload,
 } from "@/schemas/chat.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SendHorizonal } from "lucide-react";
@@ -15,10 +14,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import UploadButton from "./upload-button";
 import FilesPreview from "./files-preview";
-import { useUploadThing } from "@/lib/upload-thing";
 
 export default function ChatInputBar() {
-  const [loading, setLoading] = useState(false);
+  const loadingState = useState(false);
+  const [loading, setLoading] = loadingState;
+
   const { chatId } = useGetActiveChat();
 
   const methods = useForm<CreateMessageInput>({
@@ -30,63 +30,18 @@ export default function ChatInputBar() {
     },
   });
 
-  const { startUpload: startImagesUpload } = useUploadThing("imageUploader");
-  const { startUpload: startVideosUpload } = useUploadThing("videoUploader");
-
-  const onSubmit = async (values: CreateMessageInput) => {
+  const onSubmit = (values: CreateMessageInput) => {
     if (!values.files?.length && !values.message) return;
+    if (loading) return;
 
     setLoading(true);
-
-    const { files } = values;
-    let filesToUpload: FileToUpload[] = [];
-
-    if (!!files?.length) {
-      const videos = files?.filter((f: File) =>
-        f?.type?.includes("video")
-      ) as File[];
-
-      const images = files?.filter((f: File) =>
-        f?.type?.includes("image")
-      ) as File[];
-
-      let videosPromise;
-      let imagesPromise;
-
-      if (!!videos?.length) videosPromise = startVideosUpload(videos);
-      if (!!images?.length) imagesPromise = startImagesUpload(images);
-
-      // fetching in parallel for faster results
-      const [uploadedVideos, uploadedImages] = await Promise.all([
-        videosPromise,
-        imagesPromise,
-      ]);
-
-      if (!!uploadedVideos?.length) {
-        const formattedVideos: FileToUpload[] = uploadedVideos?.map((v) => ({
-          url: v.fileUrl,
-          type: "video",
-        }));
-
-        filesToUpload = formattedVideos;
-      }
-
-      if (!!uploadedImages?.length) {
-        const formattedImages: FileToUpload[] = uploadedImages?.map((i) => ({
-          url: i.fileUrl,
-          type: "image",
-        }));
-
-        filesToUpload = [...filesToUpload, ...formattedImages];
-      }
-    }
 
     fetch("/api/messages", {
       method: "POST",
       body: JSON.stringify({
         message: values.message,
         chatId: values.chatId,
-        files: filesToUpload?.length ? filesToUpload : null,
+        files: values.files,
       }),
     })
       .then(() => {
@@ -102,8 +57,8 @@ export default function ChatInputBar() {
     <Form {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <div className="py-4 px-4 bg-white dark:bg-neutral-800 border-t flex items-center gap-2 lg:gap-4 w-full dark:border-none relative h-[70px]">
-          <FilesPreview />
-          <UploadButton />
+          <FilesPreview loading={loading} />
+          <UploadButton loadingState={loadingState} />
           <div className="flex items-center gap-2 lg:gap-4 w-full">
             <FormField
               control={methods.control}
@@ -128,7 +83,7 @@ export default function ChatInputBar() {
             size="icon"
             variant="ghost"
             loading={loading}
-            className="h-9 w-9 bg-blue-500 hover:bg-blue-600 transition rounded-full"
+            className="h-9 w-9 bg-blue-500 hover:bg-blue-600 transition rounded-full shrink-0"
             loaderClasses="text-white"
           >
             <SendHorizonal className="text-white h-5 w-5" />

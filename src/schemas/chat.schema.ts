@@ -16,14 +16,6 @@ export type CreateGroupInput = z.TypeOf<typeof createGroupSchema>;
 
 export const createMessageSchema = z.object({
   message: z.string().optional(),
-  files: z.any().array(),
-  chatId: requiredString,
-});
-
-export type CreateMessageInput = z.TypeOf<typeof createMessageSchema>;
-
-export const serverCreateMessageInput = z.object({
-  message: z.string().optional(),
   files: z
     .object({
       type: z.enum(["image", "video"]),
@@ -34,9 +26,7 @@ export const serverCreateMessageInput = z.object({
   chatId: requiredString,
 });
 
-export type ServerCreateMessageInput = z.TypeOf<
-  typeof serverCreateMessageInput
->;
+export type CreateMessageInput = z.TypeOf<typeof createMessageSchema>;
 
 export type FileToUpload = {
   type: "image" | "video";
