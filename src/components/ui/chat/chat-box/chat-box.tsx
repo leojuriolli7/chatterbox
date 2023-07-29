@@ -2,7 +2,7 @@
 
 import useGetActiveChat from "@/hooks/useGetActiveChat";
 import type { FullMessage } from "@/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Message from "./message/message";
 
 export default function ChatBox({
@@ -12,6 +12,12 @@ export default function ChatBox({
 }) {
   const [messages, setMessages] = useState(initialMessages);
   const { chatId } = useGetActiveChat();
+
+  useEffect(() => {
+    void fetch(`/api/chat/${chatId}/seen`, {
+      method: "POST",
+    });
+  }, [chatId]);
 
   return (
     <div className="flex-1 overflow-y-auto">

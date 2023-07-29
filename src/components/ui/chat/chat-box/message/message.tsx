@@ -22,12 +22,27 @@ export default function Message({
   const isOwnMessage = session?.user?.email === sender.email;
   const hasFiles = !!files.length;
 
-  /** Get all users that have seen a message, except the author. */
+  /**
+   * Takes the `seen` object and transforms into list of users
+   * that have read the last message.
+   *
+   * Output: "Seen by name1, name2 and X more"
+   */
   const seenList = useMemo(() => {
-    return (seen || [])
+    function formatNames(names: string[]): string {
+      if (names.length <= 2) {
+        return names.join(", ");
+      }
+
+      const numOthers = names.length - 2;
+      return `${names[0]}, ${names[1]}, and ${numOthers} more`;
+    }
+
+    const arrayOfNames = (seen || [])
       .filter((user) => user.email !== sender.email)
-      .map((user) => user.name)
-      .join(", ");
+      .map((user) => user.name as string);
+
+    return formatNames(arrayOfNames);
   }, [seen, sender]);
 
   return (
@@ -57,6 +72,11 @@ export default function Message({
           {hasFiles && <MediaMessage files={files} />}
           {body && <p className={cn(hasFiles && "mt-2")}>{body}</p>}
         </div>
+        {isLast && isOwnMessage && seenList.length > 0 && (
+          <p className="text-xs font-light text-neutral-500">
+            {`Seen by ${seenList}`}
+          </p>
+        )}
       </div>
     </div>
   );
