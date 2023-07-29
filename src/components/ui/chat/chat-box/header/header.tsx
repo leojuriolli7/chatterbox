@@ -30,7 +30,7 @@ export default function Header(chat: Props) {
         <div className="flex gap-3 items-center">
           <Link
             className="lg:hidden block text-blue-500 hover:text-blue-600 transition-colors cursor-pointer"
-            href="/chat"
+            href="/chats"
           >
             <span className="sr-only">Go back to chat list</span>
 
