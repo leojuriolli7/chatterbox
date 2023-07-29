@@ -18,7 +18,7 @@ const useMembersStatus = () => {
 
     // runs when the user first subscribes, we set the active users at that
     // time.
-    channel.bind("pusher:subscription-succeeded", (members: Members) => {
+    channel.bind("pusher:subscription_succeeded", (members: Members) => {
       const initialMembers: string[] = [];
 
       // `id` is the user's email.
