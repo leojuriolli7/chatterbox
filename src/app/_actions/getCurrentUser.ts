@@ -1,6 +1,7 @@
+import { cache } from "react";
 import getServerSideSession from "./getServerSideSession";
 
-export default async function getCurrentUser() {
+const getCurrentUser = cache(async () => {
   try {
     const session = await getServerSideSession();
     if (!session?.user?.email) return null;
@@ -17,4 +18,6 @@ export default async function getCurrentUser() {
   } catch (e) {
     return null;
   }
-}
+});
+
+export default getCurrentUser;
