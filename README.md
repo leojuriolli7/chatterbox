@@ -12,3 +12,4 @@
 10. Reply
 11. Reactions
 12. Gifs
+13. Use streaming
