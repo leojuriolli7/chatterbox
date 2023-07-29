@@ -6,10 +6,11 @@
 ---
 
 3. Better error handling on fetch calls
-4. Forgot password flow with nodemailer
-5. Delete messages
-6. Roles
-7. Infinite scrolling inside chats and on user/chat list
-8. Reply
-9. Reactions
-10. Gifs
+4. Convert API routes into server actions
+5. Forgot password flow with nodemailer
+6. Delete messages
+7. Roles
+8. Infinite scrolling inside chats and on user/chat list
+9. Reply
+10. Reactions
+11. Gifs

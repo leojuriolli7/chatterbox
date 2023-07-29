@@ -49,8 +49,9 @@ export default function Header(chat: Props) {
 
       <button
         type="button"
-        className="text-blue-500 hover:text-blue-600 transition-colors"
+        className="text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors"
       >
+        <span className="sr-only">Click to see options for this chat</span>
         <MoreVertical className="w-7 h-7" />
       </button>
     </div>

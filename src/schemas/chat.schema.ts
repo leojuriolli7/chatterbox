@@ -13,3 +13,11 @@ export const createGroupSchema = z.object({
 });
 
 export type CreateGroupInput = z.TypeOf<typeof createGroupSchema>;
+
+export const createMessageSchema = z.object({
+  message: z.string().optional(),
+  files: z.any().array(),
+  chatId: requiredString,
+});
+
+export type CreateMessageInput = z.TypeOf<typeof createMessageSchema>;
