@@ -15,9 +15,11 @@ export default function UsersList({ users }: Props) {
           </h2>
         </div>
 
-        {users?.map((user) => (
-          <UserPreview key={user.id} {...user} />
-        ))}
+        <div className="space-y-2">
+          {users?.map((user) => (
+            <UserPreview key={user.id} {...user} />
+          ))}
+        </div>
       </div>
     </aside>
   );

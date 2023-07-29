@@ -7,12 +7,25 @@ export const getOrCreateDMSchema = z.object({
 
 export type GetOrCreateDMInput = z.TypeOf<typeof getOrCreateDMSchema>;
 
-export const createGroupSchema = z.object({
+export const clientCreateGroupSchema = z.object({
+  members: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+    })
+    .array()
+    .min(2, "Must select atleast 2 members"),
+  name: requiredString,
+});
+
+export type ClientCreateGroupInput = z.TypeOf<typeof clientCreateGroupSchema>;
+
+export const serverCreateGroupSchema = z.object({
   members: z.string().array().min(2),
   name: requiredString,
 });
 
-export type CreateGroupInput = z.TypeOf<typeof createGroupSchema>;
+export type ServerCreateGroupInput = z.TypeOf<typeof serverCreateGroupSchema>;
 
 export const createMessageSchema = z.object({
   message: z.string().optional(),

@@ -15,16 +15,18 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
-  type CreateGroupInput,
-  createGroupSchema,
+  type ClientCreateGroupInput,
+  type ServerCreateGroupInput,
+  clientCreateGroupSchema,
 } from "@/schemas/chat.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { User } from "@prisma/client";
+import type { User, Chat } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/useToast";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { AddMembers } from "./add-members";
 
 type Props = {
   onOpenChange(open: boolean): void;
@@ -35,8 +37,8 @@ export default function CreateGroupDialogContent({
   onOpenChange,
   users,
 }: Props) {
-  const methods = useForm<CreateGroupInput>({
-    resolver: zodResolver(createGroupSchema),
+  const methods = useForm<ClientCreateGroupInput>({
+    resolver: zodResolver(clientCreateGroupSchema),
     defaultValues: {
       name: "",
       members: [],
@@ -47,15 +49,32 @@ export default function CreateGroupDialogContent({
   const { toast } = useToast();
   const router = useRouter();
 
-  const onSubmit = (values: CreateGroupInput) => {
+  const selectableUsers = useMemo(
+    () =>
+      users.map((u) => ({
+        name: u.name || "",
+        id: u.id,
+      })),
+    [users]
+  );
+
+  const onSubmit = (values: ClientCreateGroupInput) => {
     setLoading(true);
 
-    fetch(`/api/chat`, { method: "POST", body: JSON.stringify(values) })
-      .then((res) => {
+    const serverPayload: ServerCreateGroupInput = {
+      ...values,
+      members: values.members.map((member) => member.id),
+    };
+
+    fetch(`/api/chat`, { method: "POST", body: JSON.stringify(serverPayload) })
+      .then(async (res) => {
         if (res.ok) {
           router.refresh();
           onOpenChange(false);
           methods.reset();
+
+          const createdChat = (await res.json()) as Chat;
+          router.push(`/chats/${createdChat.id}`);
         }
         if (!res.ok) {
           toast({
@@ -100,6 +119,7 @@ export default function CreateGroupDialogContent({
                         <Input
                           {...field}
                           type="text"
+                          className="dark:bg-transparent"
                           placeholder="Write a cool name..."
                           // fool browsers to stop autocompleting.
                           autoComplete="nope"
@@ -108,6 +128,8 @@ export default function CreateGroupDialogContent({
                     </FormItem>
                   )}
                 />
+
+                <AddMembers users={selectableUsers} />
               </div>
             </div>
           </div>

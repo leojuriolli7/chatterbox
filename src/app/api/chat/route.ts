@@ -1,6 +1,9 @@
 import getCurrentUser from "@/app/_actions/getCurrentUser";
 import prisma from "@/lib/prisma";
-import { getOrCreateDMSchema, createGroupSchema } from "@/schemas/chat.schema";
+import {
+  getOrCreateDMSchema,
+  serverCreateGroupSchema,
+} from "@/schemas/chat.schema";
 import { NextResponse } from "next/server";
 
 /**
@@ -18,7 +21,7 @@ export async function POST(request: Request) {
 
     // need to identify if the body is valid, and
     // if the request is for a group chat, or DM.
-    const groupChatParse = createGroupSchema.safeParse(body);
+    const groupChatParse = serverCreateGroupSchema.safeParse(body);
     const isGroupChat = groupChatParse.success;
 
     const directMessageParse = getOrCreateDMSchema.safeParse(body);
