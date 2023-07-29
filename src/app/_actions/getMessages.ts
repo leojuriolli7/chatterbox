@@ -9,6 +9,7 @@ export default async function getMessages(chatId: string) {
       include: {
         sender: true,
         seen: true,
+        files: true,
       },
       orderBy: {
         createdAt: "asc",

@@ -64,10 +64,23 @@ model Chat {
   users   User[]   @relation(fields: [userIds], references: [id])
 }
 
+enum FILE_TYPES {
+  image
+  video
+}
+
+model File {
+  id        String         @id @default(auto()) @map("_id") @db.ObjectId
+  type      FILE_TYPES
+  url       String
+  messageId String         @db.ObjectId
+  message   Message        @relation(fields: [messageId], references: [id], onDelete: Cascade)
+}
+
 model Message {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
-  image     String?
+  files     File[]
   body      String?
 
   chatId String @db.ObjectId

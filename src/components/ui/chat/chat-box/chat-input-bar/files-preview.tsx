@@ -6,11 +6,14 @@ import type { FileWithPath } from "./upload-button";
 import Image from "next/image";
 import { X as CloseIcon } from "lucide-react";
 
+const isImage = (file: File) => file.type.includes("image");
+const isVideo = (file: File) => file.type.includes("video");
+
 export default function FilesPreview() {
   const { watch, setValue } = useFormContext<CreateMessageInput>();
   const files = watch("files") as FileWithPath[];
 
-  const onClickDeleteImage = (id?: string) => () => {
+  const onClickDeleteFile = (id?: string) => () => {
     setValue(
       "files",
       files.filter((file) => file.id !== id)
@@ -22,21 +25,33 @@ export default function FilesPreview() {
       {files.map((file) => (
         <div key={file.id} className="relative shrink-0">
           <button
-            className="absolute -top-2 -right-2 bg-white dark:bg-neutral-900 dark:border-neutral-700 border rounded-full w-8 h-8 flex justify-center items-center"
+            className="absolute -top-2 -right-2 bg-white dark:bg-neutral-900 dark:border-neutral-700 border rounded-full w-8 h-8 flex justify-center items-center z-20"
             type="button"
-            onClick={onClickDeleteImage(file.id)}
+            onClick={onClickDeleteFile(file.id)}
           >
             <span className="sr-only">Remove this image</span>
             <CloseIcon className="w-5 h-5" />
           </button>
-          <Image
-            unoptimized
-            src={file.localFilePath as string}
-            alt="Uploaded image"
-            width={80}
-            height={80}
-            className="rounded-md object-cover min-w-[80px] aspect-square shadow-md"
-          />
+          {isImage(file) && (
+            <Image
+              unoptimized
+              src={file.localFilePath as string}
+              alt="Uploaded image"
+              width={80}
+              height={80}
+              className="rounded-md object-cover min-w-[80px] aspect-square shadow-md"
+            />
+          )}
+
+          {isVideo(file) && (
+            <video
+              src={file.localFilePath as string}
+              muted
+              width={80}
+              height={80}
+              className="rounded-md object-cover min-w-[80px] aspect-square shadow-md"
+            />
+          )}
         </div>
       ))}
     </div>

@@ -21,3 +21,24 @@ export const createMessageSchema = z.object({
 });
 
 export type CreateMessageInput = z.TypeOf<typeof createMessageSchema>;
+
+export const serverCreateMessageInput = z.object({
+  message: z.string().optional(),
+  files: z
+    .object({
+      type: z.enum(["image", "video"]),
+      url: z.string(),
+    })
+    .array()
+    .nullable(),
+  chatId: requiredString,
+});
+
+export type ServerCreateMessageInput = z.TypeOf<
+  typeof serverCreateMessageInput
+>;
+
+export type FileToUpload = {
+  type: "image" | "video";
+  url: string;
+};

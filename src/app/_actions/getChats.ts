@@ -24,6 +24,7 @@ export default async function getChats() {
           include: {
             sender: true,
             seen: true,
+            files: true,
           },
         },
       },

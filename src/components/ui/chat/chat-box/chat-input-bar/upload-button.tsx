@@ -34,6 +34,15 @@ export default function UploadButton() {
     }
 
     const filesArray = Array.from(files);
+
+    const invalidType = filesArray.some(
+      (file) => !file?.type.includes("image") && !file?.type.includes("video")
+    );
+
+    if (invalidType) {
+      return toast({ title: "Only videos or images are allowed" });
+    }
+
     const fileTooBig = filesArray.some((file) => {
       const sizeInKB = file.size / 1024;
 

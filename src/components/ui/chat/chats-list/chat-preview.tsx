@@ -37,9 +37,9 @@ export default function ChatPreview({ selected, ...chat }: Props) {
   }, [last, userEmail]);
 
   const lastMessageText = useMemo(() => {
-    if (!!last?.image) return "Sent an image";
-
     if (!!last?.body) return last?.body;
+
+    if (!!last?.files) return "Sent files";
 
     return "Started a chat";
   }, [last]);

@@ -7,6 +7,7 @@ import useGetActiveChat from "@/hooks/useGetActiveChat";
 import {
   type CreateMessageInput,
   createMessageSchema,
+  type FileToUpload,
 } from "@/schemas/chat.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SendHorizonal } from "lucide-react";
@@ -14,9 +15,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import UploadButton from "./upload-button";
 import FilesPreview from "./files-preview";
+import { useUploadThing } from "@/lib/upload-thing";
 
 export default function ChatInputBar() {
-  const [loading, _setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { chatId } = useGetActiveChat();
 
   const methods = useForm<CreateMessageInput>({
@@ -28,10 +30,72 @@ export default function ChatInputBar() {
     },
   });
 
-  const onSubmit = (values: CreateMessageInput) => {
+  const { startUpload: startImagesUpload } = useUploadThing("imageUploader");
+  const { startUpload: startVideosUpload } = useUploadThing("videoUploader");
+
+  const onSubmit = async (values: CreateMessageInput) => {
     if (!values.files?.length && !values.message) return;
 
-    console.log("values:", values);
+    setLoading(true);
+
+    const { files } = values;
+    let filesToUpload: FileToUpload[] = [];
+
+    if (!!files?.length) {
+      const videos = files?.filter((f: File) =>
+        f?.type?.includes("video")
+      ) as File[];
+
+      const images = files?.filter((f: File) =>
+        f?.type?.includes("image")
+      ) as File[];
+
+      let videosPromise;
+      let imagesPromise;
+
+      if (!!videos?.length) videosPromise = startVideosUpload(videos);
+      if (!!images?.length) imagesPromise = startImagesUpload(images);
+
+      // fetching in parallel for faster results
+      const [uploadedVideos, uploadedImages] = await Promise.all([
+        videosPromise,
+        imagesPromise,
+      ]);
+
+      if (!!uploadedVideos?.length) {
+        const formattedVideos: FileToUpload[] = uploadedVideos?.map((v) => ({
+          url: v.fileUrl,
+          type: "video",
+        }));
+
+        filesToUpload = formattedVideos;
+      }
+
+      if (!!uploadedImages?.length) {
+        const formattedImages: FileToUpload[] = uploadedImages?.map((i) => ({
+          url: i.fileUrl,
+          type: "image",
+        }));
+
+        filesToUpload = [...filesToUpload, ...formattedImages];
+      }
+    }
+
+    fetch("/api/messages", {
+      method: "POST",
+      body: JSON.stringify({
+        message: values.message,
+        chatId: values.chatId,
+        files: filesToUpload?.length ? filesToUpload : null,
+      }),
+    })
+      .then(() => {
+        methods.resetField("files");
+        methods.resetField("message");
+        methods.reset();
+      })
+      .finally(() => setLoading(false))
+      .catch((e) => console.log(e));
   };
 
   return (
