@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "npx tsc"
+    "typecheck": "npx tsc",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
@@ -35,6 +36,7 @@
     "date-fns": "^2.30.0",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.12",
+    "jotai": "^2.2.2",
     "lodash.find": "^4.6.0",
     "lucide-react": "^0.263.1",
     "next": "13.4.12",

@@ -34,3 +34,8 @@ export const signInSchema = z.object({
 });
 
 export type SignInInput = z.TypeOf<typeof signInSchema>;
+
+export const pusherAuthSchema = z.object({
+  socket_id: z.string(),
+  channel_name: z.string(),
+});

@@ -6,7 +6,9 @@ import { useCallback, useState } from "react";
 import ChatAvatar from "../chat-avatar";
 import LoadingDialog from "../../loading-dialog";
 
-export default function UserPreview({ id, name, image }: User) {
+export default function UserPreview(user: User) {
+  const { id, name } = user;
+
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -34,7 +36,7 @@ export default function UserPreview({ id, name, image }: User) {
         type="button"
         className="w-full relative flex items-center border border-neutral-200 dark:border-neutral-800 space-x-3 bg-white dark:bg-neutral-925 p-3 hover:bg-neutral-100 dark:hover:bg-neutral-800/60 rounded-lg transition"
       >
-        <ChatAvatar name={name} image={image} />
+        <ChatAvatar {...user} />
 
         <div className="min-w-0 flex-1">
           <div className="focus:outline-none">

@@ -57,7 +57,7 @@ export default function ChatPreview({ selected, ...chat }: Props) {
         {chat.isGroup ? (
           <GroupAvatar users={chat.users} />
         ) : (
-          <ChatAvatar name={otherUser?.name} image={otherUser?.image} />
+          <ChatAvatar {...otherUser} />
         )}
 
         <div className="min-w-0 flex-1">

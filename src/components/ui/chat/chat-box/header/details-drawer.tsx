@@ -10,6 +10,8 @@ import { useToast } from "@/hooks/useToast";
 import { useRouter } from "next/navigation";
 import GroupAvatar from "@/components/ui/chat/group-avatar";
 import UserPreview from "@/components/ui/chat/users-list/user-preview";
+import { useAtomValue } from "jotai";
+import { activeUsersAtom } from "@/store/active-users";
 
 type Props = Chat & {
   users: User[];
@@ -22,6 +24,9 @@ export default function DetailsDrawerContent(chat: Props) {
   const [_, setShowDeleteModal] = deleteChatModalState;
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  const members = useAtomValue(activeUsersAtom);
+  const isActive = members.indexOf(otherUser?.email as string) !== -1;
 
   const onClickDelete = () => {
     setLoading(true);
@@ -65,8 +70,8 @@ export default function DetailsDrawerContent(chat: Props) {
   const subtitle = useMemo(() => {
     if (isGroup === true) return `${users.length} members`;
 
-    return "Active";
-  }, [isGroup, users]);
+    return isActive ? "Active" : "Offline";
+  }, [isGroup, users, isActive]);
 
   return (
     <>
@@ -86,11 +91,7 @@ export default function DetailsDrawerContent(chat: Props) {
             {isGroup ? (
               <GroupAvatar users={chat.users} size="medium" />
             ) : (
-              <ChatAvatar
-                className="w-14 h-14"
-                image={otherUser.image}
-                name={otherUser.name}
-              />
+              <ChatAvatar className="w-14 h-14" {...otherUser} />
             )}
 
             <h3 className="mt-2">{title}</h3>

@@ -40,7 +40,7 @@ export default function Message({
   return (
     <div className={cn("flex gap-3 p-4", isOwnMessage && "justify-end")}>
       <div className={cn(isOwnMessage && "order-2")}>
-        <ChatAvatar image={sender.image} name={sender.name} />
+        <ChatAvatar {...sender} />
       </div>
 
       <div className={cn("flex flex-col gap-2", isOwnMessage && "items-end")}>

@@ -1,14 +1,23 @@
+import { useAtomValue } from "jotai";
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
+import { activeUsersAtom } from "@/store/active-users";
+import type { User } from "@prisma/client";
+
+type Props = User & {
+  className?: string;
+  alwaysOnline?: boolean;
+};
 
 export default function ChatAvatar({
+  className,
+  email,
   name,
   image,
-  className,
-}: {
-  name: string | null;
-  image: string | null;
-  className?: string;
-}) {
+  alwaysOnline,
+}: Props) {
+  const members = useAtomValue(activeUsersAtom);
+  const isActive = members.indexOf(email as string) !== -1;
+
   return (
     <div className="relative">
       <Avatar className={className}>
@@ -16,7 +25,10 @@ export default function ChatAvatar({
         <AvatarFallback>{name}</AvatarFallback>
       </Avatar>
 
-      <span className="absolute block rounded-full bg-green-500 ring-2 ring-white top-0 left-0 w-2 h-2 md:h-3 md:w-3" />
+      {isActive ||
+        (alwaysOnline && (
+          <span className="absolute block rounded-full bg-green-500 ring-2 ring-white top-0 left-0 w-2 h-2 md:h-3 md:w-3" />
+        ))}
     </div>
   );
 }

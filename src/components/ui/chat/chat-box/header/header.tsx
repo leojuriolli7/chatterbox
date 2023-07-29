@@ -9,6 +9,8 @@ import ChatAvatar from "@/components/ui/chat/chat-avatar";
 import GroupAvatar from "@/components/ui/chat/group-avatar";
 import DetailsDrawerContent from "./details-drawer";
 import { Drawer, DrawerTrigger } from "@/components/ui/drawer";
+import { useAtomValue } from "jotai";
+import { activeUsersAtom } from "@/store/active-users";
 
 type Props = Chat & {
   users: User[];
@@ -16,14 +18,16 @@ type Props = Chat & {
 
 export default function Header(chat: Props) {
   const otherUser = useGetOtherUser(chat);
+  const members = useAtomValue(activeUsersAtom);
+  const isActive = members.indexOf(otherUser?.email as string) !== -1;
 
   const statusText = useMemo(() => {
     if (chat.isGroup === true) {
       return `${chat.users.length} members`;
     }
 
-    return "Active";
-  }, [chat.users, chat.isGroup]);
+    return isActive ? "Active" : "Offline";
+  }, [chat.users, chat.isGroup, isActive]);
 
   return (
     <Drawer>
@@ -46,7 +50,7 @@ export default function Header(chat: Props) {
               {chat.isGroup ? (
                 <GroupAvatar users={chat.users} />
               ) : (
-                <ChatAvatar name={otherUser?.name} image={otherUser?.image} />
+                <ChatAvatar {...otherUser} />
               )}
 
               <div className="flex flex-col">

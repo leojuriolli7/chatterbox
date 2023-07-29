@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import AuthProvider from "@/components/providers/auth-provider";
 import { cn } from "@/lib/utils";
+import ActiveStatus from "@/components/providers/active-status";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +29,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <AuthProvider>
+            <ActiveStatus />
             {children}
             <Toaster />
           </AuthProvider>
