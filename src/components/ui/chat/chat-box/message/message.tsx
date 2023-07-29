@@ -65,7 +65,9 @@ export default function Message({
         <div
           className={cn(
             "text-sm w-fit break-words py-2 px-3",
-            isOwnMessage ? "bg-blue-500 text-white" : "bg-neutral-100",
+            isOwnMessage
+              ? "bg-blue-500 text-white"
+              : "bg-neutral-100 dark:bg-neutral-700",
             hasFiles ? "rounded-md" : "rounded-full"
           )}
         >
