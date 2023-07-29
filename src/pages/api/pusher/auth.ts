@@ -1,4 +1,4 @@
-import { authOptions } from "@/lib/auth-options";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { pusherServer } from "@/lib/pusher";
 import { pusherAuthSchema } from "@/schemas/auth.schema";
 import type { NextApiRequest, NextApiResponse } from "next";
