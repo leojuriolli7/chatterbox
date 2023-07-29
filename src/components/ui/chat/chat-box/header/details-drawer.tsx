@@ -8,12 +8,14 @@ import ChatAvatar from "@/components/ui/chat/chat-avatar";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useToast } from "@/hooks/useToast";
 import { useRouter } from "next/navigation";
+import GroupAvatar from "@/components/ui/chat/group-avatar";
+import UserPreview from "@/components/ui/chat/users-list/user-preview";
 
 type Props = Chat & {
   users: User[];
 };
 
-export default function ProfileDrawerContent(chat: Props) {
+export default function DetailsDrawerContent(chat: Props) {
   const otherUser = useGetOtherUser(chat);
   const { toast } = useToast();
   const deleteChatModalState = useState(false);
@@ -52,9 +54,10 @@ export default function ProfileDrawerContent(chat: Props) {
 
   const { name, isGroup, users } = chat;
 
-  const joined = useMemo(
-    () => format(new Date(otherUser.createdAt), "PP"),
-    [otherUser.createdAt]
+  const dateToDisplay = useMemo(
+    () =>
+      format(new Date(isGroup ? chat.createdAt : otherUser.createdAt), "PP"),
+    [otherUser.createdAt, isGroup, chat.createdAt]
   );
 
   const title = name || otherUser.name;
@@ -80,11 +83,15 @@ export default function ProfileDrawerContent(chat: Props) {
         <div className="relative mt-6 flex-1 px-4 sm:px-6">
           <div className="flex flex-col items-center">
             <div className="mb-2"></div>
-            <ChatAvatar
-              className="w-14 h-14"
-              image={otherUser.image}
-              name={otherUser.name}
-            />
+            {isGroup ? (
+              <GroupAvatar users={chat.users} size="medium" />
+            ) : (
+              <ChatAvatar
+                className="w-14 h-14"
+                image={otherUser.image}
+                name={otherUser.name}
+              />
+            )}
 
             <h3 className="mt-2">{title}</h3>
 
@@ -110,6 +117,33 @@ export default function ProfileDrawerContent(chat: Props) {
 
         <div className="w-full pb-5 pt-5 sm:px-0 sm:pt-0">
           <dl className="space-y-8 px-6 sm:space-y-6 sm:px-6">
+            {isGroup && (
+              <>
+                <div>
+                  <dt className="text-sm font-medium text-neutral-500 sm:w-40 sm:flex-shrink-0">
+                    Users
+                  </dt>
+
+                  <dd className="mt-1 space-y-2">
+                    {users.map((user) => (
+                      <UserPreview key={user.id} {...user} />
+                    ))}
+                  </dd>
+                </div>
+
+                <hr className="dark:border-neutral-700" />
+
+                <div>
+                  <dt className="text-sm font-medium text-neutral-500 sm:w-40 sm:flex-shrink-0 dark:text-neutral-400">
+                    Created at
+                  </dt>
+                  <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-500 sm:col-span-2">
+                    <time dateTime={dateToDisplay}>{dateToDisplay}</time>
+                  </dd>
+                </div>
+              </>
+            )}
+
             {!isGroup && (
               <>
                 <div>
@@ -128,7 +162,7 @@ export default function ProfileDrawerContent(chat: Props) {
                       Joined
                     </dt>
                     <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-500 sm:col-span-2">
-                      <time dateTime={joined}>{joined}</time>
+                      <time dateTime={dateToDisplay}>{dateToDisplay}</time>
                     </dd>
                   </div>
                 </>

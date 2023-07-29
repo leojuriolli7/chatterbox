@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useMemo } from "react";
 import ChatAvatar from "../chat-avatar";
+import GroupAvatar from "../group-avatar";
 
 type Props = ChatWithMessagesAndUsers & {
   selected?: boolean;
@@ -53,7 +54,11 @@ export default function ChatPreview({ selected, ...chat }: Props) {
           selected ? "bg-neutral-100 dark:bg-neutral-800/60" : "bg-white"
         )}
       >
-        <ChatAvatar name={otherUser?.name} image={otherUser?.image} />
+        {chat.isGroup ? (
+          <GroupAvatar users={chat.users} />
+        ) : (
+          <ChatAvatar name={otherUser?.name} image={otherUser?.image} />
+        )}
 
         <div className="min-w-0 flex-1">
           <div className="focus:outline-none">

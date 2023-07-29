@@ -6,7 +6,8 @@ import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";
 import ChatAvatar from "@/components/ui/chat/chat-avatar";
-import ProfileDrawerContent from "./profile-drawer";
+import GroupAvatar from "@/components/ui/chat/group-avatar";
+import DetailsDrawerContent from "./details-drawer";
 import { Drawer, DrawerTrigger } from "@/components/ui/drawer";
 
 type Props = Chat & {
@@ -42,7 +43,11 @@ export default function Header(chat: Props) {
               className="flex gap-3 items-center cursor-pointer"
               role="button"
             >
-              <ChatAvatar name={otherUser?.name} image={otherUser?.image} />
+              {chat.isGroup ? (
+                <GroupAvatar users={chat.users} />
+              ) : (
+                <ChatAvatar name={otherUser?.name} image={otherUser?.image} />
+              )}
 
               <div className="flex flex-col">
                 <h3 className="line-clamp-1 max-w-[600px] break-words">
@@ -58,7 +63,7 @@ export default function Header(chat: Props) {
         </div>
 
         <DrawerTrigger asChild>
-          <ProfileDrawerContent {...chat} />
+          <DetailsDrawerContent {...chat} />
         </DrawerTrigger>
       </div>
     </Drawer>
