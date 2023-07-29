@@ -15,88 +15,53 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
-  editProfileSchema,
-  type EditProfileInput,
-} from "@/schemas/profile.schema";
+  type CreateGroupInput,
+  createGroupSchema,
+} from "@/schemas/chat.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { User } from "@prisma/client";
 import { useForm } from "react-hook-form";
-import { UploadAvatar } from "./avatar-upload";
 import { Button } from "@/components/ui/button";
-import { useUploadThing } from "@/lib/upload-thing";
 import { useToast } from "@/hooks/useToast";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { v4 } from "uuid";
 
-type Props = User & {
+type Props = {
   onOpenChange(open: boolean): void;
+  users: User[];
 };
 
-export default function ProfileSettingsDialog({
+export default function CreateGroupDialogContent({
   onOpenChange,
-  ...user
+  users,
 }: Props) {
-  const methods = useForm<EditProfileInput>({
-    resolver: zodResolver(editProfileSchema),
+  const methods = useForm<CreateGroupInput>({
+    resolver: zodResolver(createGroupSchema),
     defaultValues: {
-      name: user?.name as string,
-      avatar: user?.image,
+      name: "",
+      members: [],
     },
   });
   const { handleSubmit, control } = methods;
-  const { startUpload: startImageUpload } = useUploadThing("imageUploader");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
 
-  const onSubmit = async (values: EditProfileInput) => {
-    const { name, avatar } = values;
-    let uploadedAvatarUrl: string | null = avatar;
+  const onSubmit = (values: CreateGroupInput) => {
     setLoading(true);
 
-    const hasNewAvatar = user.image !== avatar;
-
-    if (!!avatar && hasNewAvatar === true) {
-      const avatarBlob = await fetch(avatar).then((r) => r.blob());
-      const avatarFile = new File([avatarBlob], `${name}-${v4()}.png`, {
-        type: "image/png",
-      });
-
-      if (avatarFile)
-        await startImageUpload([avatarFile])
-          .then((res) => {
-            if (res?.[0]) {
-              uploadedAvatarUrl = res[0].fileUrl;
-            }
-          })
-          .catch((e) =>
-            toast({
-              title: "Error uploading your avatar",
-              variant: "destructive",
-              description: JSON.stringify(e),
-            })
-          );
-    }
-
-    fetch(`/api/profile`, {
-      method: "POST",
-      body: JSON.stringify({
-        avatar: uploadedAvatarUrl,
-        name,
-      }),
-    })
+    fetch(`/api/chat`, { method: "POST", body: JSON.stringify(values) })
       .then((res) => {
         if (res.ok) {
           router.refresh();
           onOpenChange(false);
           methods.reset();
         }
-
         if (!res.ok) {
           toast({
-            title: "Error updating your profile.",
+            title: "Error creating your new chat",
             description: res.statusText,
+            variant: "destructive",
           });
         }
       })
@@ -115,28 +80,27 @@ export default function ProfileSettingsDialog({
           <div className="space-y-12">
             <div className="border-neutral-900/20 pb-12">
               <h2 className="leading-7 text-2xl text-neutral-900 dark:text-neutral-200 font-semibold">
-                Update your profile
+                Create new group chat
               </h2>
 
-              <p className="mt-1 text-sm leading-6 text-neutral-600 dark:text-neutral-400">
-                Make your profile <span className="font-bold">yours.</span>
+              <p className="mt-1 text-sm leading-5 text-neutral-600 dark:text-neutral-400">
+                Collaborate, discuss, and share. Customize your group chat by
+                adding a title and inviting members.
               </p>
 
               <div className="mt-10 flex flex-col gap-8">
-                <UploadAvatar />
-
                 <FormField
                   control={control}
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Username</FormLabel>
+                      <FormLabel>Group name</FormLabel>
                       <FormMessage />
                       <FormControl>
                         <Input
                           {...field}
                           type="text"
-                          placeholder="Write a username..."
+                          placeholder="Write a cool name..."
                           // fool browsers to stop autocompleting.
                           autoComplete="nope"
                         />
@@ -155,7 +119,7 @@ export default function ProfileSettingsDialog({
               </Button>
             </DialogTrigger>
             <Button variant="brand" loading={loading}>
-              Update
+              Create
             </Button>
           </DialogFooter>
         </form>

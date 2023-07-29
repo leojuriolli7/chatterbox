@@ -6,15 +6,20 @@ import type { ChatWithMessagesAndUsers } from "@/types";
 import { UserPlus2 } from "lucide-react";
 import { useState } from "react";
 import ChatPreview from "./chat-preview";
+import type { User } from "@prisma/client";
+import CreateGroupDialogContent from "./create-group-dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
 type Props = {
   initialChats: ChatWithMessagesAndUsers[];
+  users: User[];
 };
 
-export default function ChatsList({ initialChats }: Props) {
+export default function ChatsList({ initialChats, users }: Props) {
   const { isOpen, chatId } = useGetActiveChat();
 
   const [chats, _setChats] = useState(initialChats);
+  const [createGroupOpen, setCreateGroupOpen] = useState(false);
 
   return (
     <aside
@@ -29,13 +34,21 @@ export default function ChatsList({ initialChats }: Props) {
             Chats
           </h2>
 
-          <button
-            className="rounded-full p-2 text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800/60 transition"
-            type="button"
-          >
-            <span className="sr-only">Create new group chat</span>
-            <UserPlus2 />
-          </button>
+          <Dialog open={createGroupOpen} onOpenChange={setCreateGroupOpen}>
+            <DialogTrigger asChild>
+              <button
+                className="rounded-full p-2 text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800/60 transition"
+                type="button"
+              >
+                <span className="sr-only">Create new group chat</span>
+                <UserPlus2 />
+              </button>
+            </DialogTrigger>
+            <CreateGroupDialogContent
+              users={users}
+              onOpenChange={setCreateGroupOpen}
+            />
+          </Dialog>
         </div>
 
         {chats.map((chat) => (

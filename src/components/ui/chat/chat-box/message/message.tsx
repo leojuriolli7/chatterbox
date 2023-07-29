@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import ChatAvatar from "../../chat-avatar";
 import { format } from "date-fns";
 import MediaMessage from "./media-message";
+import { formatNames } from "@/lib/format-names";
 
 type Props = FullMessage & {
   isLast: boolean;
@@ -29,15 +30,6 @@ export default function Message({
    * Output: "Seen by name1, name2 and X more"
    */
   const seenList = useMemo(() => {
-    function formatNames(names: string[]): string {
-      if (names.length <= 2) {
-        return names.join(", ");
-      }
-
-      const numOthers = names.length - 2;
-      return `${names[0]}, ${names[1]}, and ${numOthers} more`;
-    }
-
     const arrayOfNames = (seen || [])
       .filter((user) => user.email !== sender.email)
       .map((user) => user.name as string);
