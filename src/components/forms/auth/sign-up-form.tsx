@@ -37,13 +37,23 @@ export default function SignUpForm() {
       body: JSON.stringify(values),
     })
       // to-do: better error handling here
-      .then(() =>
-        signIn("credentials", {
-          email: values.email,
-          password: values.password,
-          callbackUrl: "/",
-        })
-      )
+      .then((res) => {
+        if (res.ok) {
+          void signIn("credentials", {
+            email: values.email,
+            password: values.password,
+            callbackUrl: "/",
+          });
+
+          if (!res.ok) {
+            toast({
+              title: "Something went wrong.",
+              variant: "destructive",
+              description: res.statusText,
+            });
+          }
+        }
+      })
       .catch(() => {
         toast({
           title: "Something went wrong.",

@@ -14,11 +14,13 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import UploadButton from "./upload-button";
 import FilesPreview from "./files-preview";
+import { useToast } from "@/hooks/useToast";
 
 export default function ChatInputBar() {
   const loadingState = useState(false);
   const [loading, setLoading] = loadingState;
 
+  const { toast } = useToast();
   const { chatId } = useGetActiveChat();
 
   const methods = useForm<CreateMessageInput>({
@@ -48,10 +50,18 @@ export default function ChatInputBar() {
         files: values.files,
       }),
     })
-      .then(() => {
-        methods.resetField("files");
-        methods.resetField("message");
-        methods.reset();
+      .then((res) => {
+        if (res.ok) {
+          methods.resetField("files");
+          methods.resetField("message");
+          methods.reset();
+        }
+        if (!res.ok) {
+          toast({
+            title: "Something went wrong.",
+            description: res.statusText,
+          });
+        }
       })
       .finally(() => setLoading(false))
       .catch((e) => console.log(e));

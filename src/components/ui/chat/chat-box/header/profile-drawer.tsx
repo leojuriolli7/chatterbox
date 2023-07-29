@@ -3,8 +3,11 @@ import useGetOtherUser from "@/hooks/useGetOtherUser";
 import type { Chat, User } from "@prisma/client";
 import { format } from "date-fns";
 import { MoreVertical, Trash2 } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import ChatAvatar from "@/components/ui/chat/chat-avatar";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { useToast } from "@/hooks/useToast";
+import { useRouter } from "next/navigation";
 
 type Props = Chat & {
   users: User[];
@@ -12,6 +15,40 @@ type Props = Chat & {
 
 export default function ProfileDrawerContent(chat: Props) {
   const otherUser = useGetOtherUser(chat);
+  const { toast } = useToast();
+  const deleteChatModalState = useState(false);
+  const [_, setShowDeleteModal] = deleteChatModalState;
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const onClickDelete = () => {
+    setLoading(true);
+
+    fetch(`/api/chat/${chat.id}`, { method: "DELETE" })
+      .then((res) => {
+        if (res.ok) {
+          setShowDeleteModal(false);
+          router.push("/chats");
+          router.refresh();
+        }
+
+        if (!res.ok) {
+          toast({
+            title: "Couldn't delete your message",
+            description: res.statusText,
+            variant: "destructive",
+          });
+        }
+      })
+      .catch(() => {
+        toast({
+          title: "Couldn't delete your message",
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const { name, isGroup, users } = chat;
 
@@ -57,6 +94,7 @@ export default function ProfileDrawerContent(chat: Props) {
               <button
                 type="button"
                 className="flex flex-col gap-3 items-center cursor-pointer hover:opacity-75 transition-opacity"
+                onClick={() => setShowDeleteModal(true)}
               >
                 <div className="w-10 h-10 bg-neutral-100 rounded-full flex items-center justify-center dark:bg-neutral-600 dark:text-neutral-400">
                   <Trash2 className="w-5 h-5" />
@@ -99,6 +137,14 @@ export default function ProfileDrawerContent(chat: Props) {
           </dl>
         </div>
       </DrawerContent>
+
+      <ConfirmDialog
+        onClickDelete={onClickDelete}
+        openState={deleteChatModalState}
+        confirmButtonMessage="Delete this chat"
+        loading={loading}
+        title="Are you sure you want to delete this chat?"
+      />
     </>
   );
 }
