@@ -3,13 +3,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
 export default function ChatAvatar({
   name,
   image,
+  className,
 }: {
   name: string | null;
   image: string | null;
+  className?: string;
 }) {
   return (
     <div className="relative">
-      <Avatar>
+      <Avatar className={className}>
         <AvatarImage src={image || undefined} />
         <AvatarFallback>{name}</AvatarFallback>
       </Avatar>

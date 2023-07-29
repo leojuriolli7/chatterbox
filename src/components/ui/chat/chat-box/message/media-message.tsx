@@ -8,7 +8,7 @@ const mediumMediaClass = "object-cover rounded-md w-32 h-32";
 const VideoWrapper = ({ children }: { children: React.ReactNode }) => (
   <div className="relative">
     <div className="absolute bg-neutral-800/70 w-9 h-9 rounded-full flex justify-center items-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-      <Play className="ml-1" />
+      <Play className="ml-1 text-white" />
     </div>
     {children}
   </div>
