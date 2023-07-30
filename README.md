@@ -41,3 +41,4 @@ You can create a group chat or start a DM. Users can send text messages, or uplo
 16. Reply
 17. Reactions
 18. Gifs
+19. Mute chats

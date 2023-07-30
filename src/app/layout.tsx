@@ -6,12 +6,47 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import AuthProvider from "@/components/providers/auth-provider";
 import { cn } from "@/lib/utils";
 import ActiveStatus from "@/components/providers/active-status";
+import { siteConfig } from "@/lib/site-config";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Chatterbox",
-  description: "Chat with anyone!",
+  title: siteConfig.name,
+  description: siteConfig.description,
+  keywords: [
+    "Next.js",
+    "React",
+    "Tailwind CSS",
+    "Pusher",
+    "Chat",
+    "Realtime",
+    "Chatterbox",
+  ],
+  authors: [
+    {
+      name: "leojuriolli7",
+      url: "https://github.com/leojuriolli7",
+    },
+  ],
+  creator: "leojuriolli7",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "white" },
+    { media: "(prefers-color-scheme: dark)", color: "black" },
+  ],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteConfig.url,
+    title: siteConfig.name,
+    description: siteConfig.description,
+    siteName: siteConfig.name,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [`${siteConfig.url}/opengraph-image.png`],
+  },
 };
 
 export default function RootLayout({
