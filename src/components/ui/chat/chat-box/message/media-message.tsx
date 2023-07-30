@@ -7,7 +7,7 @@ import { Play } from "lucide-react";
 import Image from "next/image";
 import { memo, useCallback } from "react";
 
-const singleMediaClass = "rounded-md max-w-[256px]";
+const singleMediaClass = "rounded-md aspect-square object-cover";
 const mediumMediaClass = "object-cover rounded-md w-32 h-32";
 
 const VideoWrapper = ({ children }: { children: React.ReactNode }) => (
