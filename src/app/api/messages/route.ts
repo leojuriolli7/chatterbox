@@ -82,12 +82,14 @@ export async function POST(request: Request) {
 
     const lastMessage = updatedChat?.messages.at(-1);
 
-    updatedChat?.users.map((user) => {
-      void pusherServer.trigger(user.email as string, "chat:update", {
-        id: chatId,
-        messages: [lastMessage],
-      });
-    });
+    await Promise.all(
+      updatedChat?.users.map(async (user) => {
+        await pusherServer.trigger(user.email as string, "chat:update", {
+          id: chatId,
+          messages: [lastMessage],
+        });
+      })
+    );
 
     return NextResponse.json(newMessage);
   } catch (e) {

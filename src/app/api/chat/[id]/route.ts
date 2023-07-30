@@ -37,11 +37,13 @@ export async function DELETE(
       },
     });
 
-    existingChat.users.forEach((user) => {
-      if (user.email) {
-        void pusherServer.trigger(user.email, "chat:remove", existingChat);
-      }
-    });
+    await Promise.all(
+      existingChat.users.map(async (user) => {
+        if (user.email) {
+          await pusherServer.trigger(user.email, "chat:remove", existingChat);
+        }
+      })
+    );
 
     return NextResponse.json(deletedChat);
   } catch (e) {

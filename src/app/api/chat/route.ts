@@ -58,11 +58,13 @@ export async function POST(request: Request) {
         },
       });
 
-      newGroupChat.users.forEach((user) => {
-        if (user.email) {
-          void pusherServer.trigger(user.email, "chat:new", newGroupChat);
-        }
-      });
+      await Promise.all(
+        newGroupChat.users.map(async (user) => {
+          if (user.email) {
+            await pusherServer.trigger(user.email, "chat:new", newGroupChat);
+          }
+        })
+      );
 
       return NextResponse.json(newGroupChat);
     }
@@ -103,11 +105,13 @@ export async function POST(request: Request) {
           },
         });
 
-        newDM.users.forEach((user) => {
-          if (user.email) {
-            void pusherServer.trigger(user.email, "chat:new", newDM);
-          }
-        });
+        await Promise.all(
+          newDM.users.map(async (user) => {
+            if (user.email) {
+              await pusherServer.trigger(user.email, "chat:new", newDM);
+            }
+          })
+        );
 
         return NextResponse.json(newDM);
       }
