@@ -18,6 +18,8 @@ export default function ChatAvatar({
   const members = useAtomValue(activeUsersAtom);
   const isActive = members.indexOf(email as string) !== -1;
 
+  const canRenderActiveStatus = alwaysOnline === true || isActive;
+
   return (
     <div className="relative">
       <Avatar className={className}>
@@ -25,10 +27,9 @@ export default function ChatAvatar({
         <AvatarFallback>{name}</AvatarFallback>
       </Avatar>
 
-      {isActive ||
-        (alwaysOnline && (
-          <span className="absolute block rounded-full bg-green-500 ring-2 ring-white top-0 left-0 w-2 h-2 md:h-3 md:w-3" />
-        ))}
+      {canRenderActiveStatus && (
+        <span className="absolute block rounded-full bg-green-500 ring-2 ring-white top-0 left-0 w-2 h-2 md:h-3 md:w-3" />
+      )}
     </div>
   );
 }
