@@ -1,5 +1,6 @@
 import getCurrentUser from "@/app/_actions/getCurrentUser";
 import { createMessageSchema } from "@/schemas/chat.schema";
+import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { pusherServer } from "@/lib/pusher";
 
@@ -20,7 +21,7 @@ export async function POST(request: Request) {
 
     const { chatId, files, message } = bodyParsing.data;
 
-    const newMessage = await prisma?.message.create({
+    const newMessage = await prisma.message.create({
       data: {
         ...(message && { body: message }),
         files: files
@@ -54,7 +55,7 @@ export async function POST(request: Request) {
       },
     });
 
-    const updatedChat = await prisma?.chat.update({
+    const updatedChat = await prisma.chat.update({
       where: {
         id: chatId,
       },

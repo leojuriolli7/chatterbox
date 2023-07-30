@@ -6,7 +6,7 @@ const getCurrentUser = async () => {
     const session = await getServerSideSession();
     if (!session?.user?.email) return null;
 
-    const currentUser = await prisma?.user.findFirst({
+    const currentUser = await prisma.user.findFirst({
       where: {
         email: session.user.email,
       },
