@@ -36,7 +36,7 @@ export default function DesktopSidebar({ currentUser }: Props) {
                 type="button"
                 className="cursor-pointer hover:opacity-75 transition"
               >
-                <ChatAvatar alwaysOnline {...currentUser} />
+                <ChatAvatar {...currentUser} alwaysOnline />
               </button>
             </DialogTrigger>
 
