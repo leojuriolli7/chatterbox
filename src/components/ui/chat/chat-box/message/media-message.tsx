@@ -68,6 +68,7 @@ function MediaMessage({ files }: { files: File[] }) {
           return (
             <VideoWrapper key={file.id}>
               <video
+                preload="metadata"
                 src={file.url}
                 width={dimensions}
                 height={dimensions}

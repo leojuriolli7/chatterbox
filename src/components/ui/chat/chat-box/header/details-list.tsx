@@ -148,7 +148,7 @@ export default function ChatDetailsList({ isDrawerOpen, ...chat }: Props) {
               View all medias chared in this chat
             </ListItemDescription>
 
-            <div className="flex flex-wrap gap-2 w-full mt-3">
+            <div className="flex flex-wrap gap-2 w-full mt-3 pb-2">
               {fetchingFiles &&
                 [1, 2, 3].map((item) => (
                   <Skeleton className="w-24 h-24" key={item} />
@@ -173,6 +173,7 @@ export default function ChatDetailsList({ isDrawerOpen, ...chat }: Props) {
                     return (
                       <video
                         width={96}
+                        preload="metadata"
                         height={96}
                         className="w-24 h-24 rounded-md object-cover hover:opacity-80 transition-opacity cursor-pointer"
                         src={file.url}
