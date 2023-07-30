@@ -1,4 +1,4 @@
-# Chatterbox
+# <img src="./public/images/logo.png" width="50" height="50" /> Chatterbox
 
 Chatterbox is a realtime messaging application built with [Next 13](https://nextjs.org/) and [Pusher](https://pusher.com/).
 
