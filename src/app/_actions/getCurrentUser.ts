@@ -1,4 +1,5 @@
 import getServerSideSession from "./getServerSideSession";
+import prisma from "@/lib/prisma";
 
 const getCurrentUser = async () => {
   try {
