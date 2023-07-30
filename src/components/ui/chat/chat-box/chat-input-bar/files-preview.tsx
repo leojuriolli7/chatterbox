@@ -1,12 +1,10 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import type { CreateMessageInput, FileToUpload } from "@/schemas/chat.schema";
+import type { CreateMessageInput } from "@/schemas/chat.schema";
 import Image from "next/image";
 import { X as CloseIcon } from "lucide-react";
-
-const isImage = (file: FileToUpload) => file.type.includes("image");
-const isVideo = (file: FileToUpload) => file.type.includes("video");
+import { isImage, isVideo } from "@/lib/files";
 
 export default function FilesPreview({ loading }: { loading: boolean }) {
   const { watch, setValue } = useFormContext<CreateMessageInput>();

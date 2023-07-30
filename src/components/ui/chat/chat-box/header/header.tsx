@@ -4,7 +4,7 @@ import useGetOtherUser from "@/hooks/useGetOtherUser";
 import type { Chat, User } from "@prisma/client";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import ChatAvatar from "@/components/ui/chat/chat-avatar";
 import GroupAvatar from "@/components/ui/chat/group-avatar";
 import DetailsDrawerContent from "./details-drawer";
@@ -21,6 +21,8 @@ export default function Header(chat: Props) {
   const members = useAtomValue(activeUsersAtom);
   const isActive = members.indexOf(otherUser?.email as string) !== -1;
 
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
   const statusText = useMemo(() => {
     if (chat.isGroup === true) {
       return `${chat.users.length} members`;
@@ -30,7 +32,7 @@ export default function Header(chat: Props) {
   }, [chat.users, chat.isGroup, isActive]);
 
   return (
-    <Drawer>
+    <Drawer onOpenChange={setDrawerOpen} open={drawerOpen}>
       <div className="bg-white dark:bg-neutral-800 dark:border-none w-full flex border-b sm:px-4 py-3 px-4 lg:px-6 justify-between items-center shadow-sm">
         <div className="flex gap-3 items-center">
           <Link
@@ -67,7 +69,7 @@ export default function Header(chat: Props) {
         </div>
 
         <DrawerTrigger asChild>
-          <DetailsDrawerContent {...chat} />
+          <DetailsDrawerContent {...chat} isOpen={drawerOpen} />
         </DrawerTrigger>
       </div>
     </Drawer>

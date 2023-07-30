@@ -1,7 +1,6 @@
 import { DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import useGetOtherUser from "@/hooks/useGetOtherUser";
 import type { Chat, User } from "@prisma/client";
-import { format } from "date-fns";
 import { MoreVertical, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import ChatAvatar from "@/components/ui/chat/chat-avatar";
@@ -9,27 +8,30 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useToast } from "@/hooks/useToast";
 import { useRouter } from "next/navigation";
 import GroupAvatar from "@/components/ui/chat/group-avatar";
-import UserPreview from "@/components/ui/chat/users-list/user-preview";
 import { useAtomValue } from "jotai";
 import { activeUsersAtom } from "@/store/active-users";
+import ChatDetailsList from "./details-list";
 
-type Props = Chat & {
+export type Props = Chat & {
   users: User[];
+  isOpen: boolean;
 };
 
-export default function DetailsDrawerContent(chat: Props) {
+export default function DetailsDrawerContent({ isOpen, ...chat }: Props) {
   const otherUser = useGetOtherUser(chat);
   const { toast } = useToast();
+  const router = useRouter();
+
   const deleteChatModalState = useState(false);
   const [_, setShowDeleteModal] = deleteChatModalState;
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
+
+  const [deletingChat, setDeletingChat] = useState(false);
 
   const members = useAtomValue(activeUsersAtom);
   const isActive = members.indexOf(otherUser?.email as string) !== -1;
 
   const onClickDelete = () => {
-    setLoading(true);
+    setDeletingChat(true);
 
     fetch(`/api/chat/${chat.id}`, { method: "DELETE" })
       .then((res) => {
@@ -53,17 +55,11 @@ export default function DetailsDrawerContent(chat: Props) {
         });
       })
       .finally(() => {
-        setLoading(false);
+        setDeletingChat(false);
       });
   };
 
   const { name, isGroup, users } = chat;
-
-  const dateToDisplay = useMemo(
-    () =>
-      format(new Date(isGroup ? chat.createdAt : otherUser.createdAt), "PP"),
-    [otherUser.createdAt, isGroup, chat.createdAt]
-  );
 
   const title = name || otherUser.name;
 
@@ -116,68 +112,14 @@ export default function DetailsDrawerContent(chat: Props) {
           </div>
         </div>
 
-        <div className="w-full pb-5 pt-5 sm:px-0 sm:pt-0">
-          <dl className="space-y-8 px-6 sm:space-y-6 sm:px-6">
-            {isGroup && (
-              <>
-                <div>
-                  <dt className="text-sm font-medium text-neutral-500 sm:w-40 sm:flex-shrink-0">
-                    Users
-                  </dt>
-
-                  <dd className="mt-1 space-y-2">
-                    {users.map((user) => (
-                      <UserPreview key={user.id} {...user} />
-                    ))}
-                  </dd>
-                </div>
-
-                <hr className="dark:border-neutral-700" />
-
-                <div>
-                  <dt className="text-sm font-medium text-neutral-500 sm:w-40 sm:flex-shrink-0 dark:text-neutral-400">
-                    Created at
-                  </dt>
-                  <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-500 sm:col-span-2">
-                    <time dateTime={dateToDisplay}>{dateToDisplay}</time>
-                  </dd>
-                </div>
-              </>
-            )}
-
-            {!isGroup && (
-              <>
-                <div>
-                  <dt className="text-sm font-medium text-neutral-500 sm:w-40 sm:flex-shrink dark:text-neutral-400">
-                    Email
-                  </dt>
-                  <dd className="mt-1 text-sm text-neutral-900 sm:col-span-2 dark:text-neutral-500">
-                    {otherUser?.email}
-                  </dd>
-                </div>
-                <>
-                  <hr className="dark:border-neutral-700" />
-
-                  <div>
-                    <dt className="text-sm font-medium text-neutral-500 sm:w-40 sm:flex-shrink-0 dark:text-neutral-400">
-                      Joined
-                    </dt>
-                    <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-500 sm:col-span-2">
-                      <time dateTime={dateToDisplay}>{dateToDisplay}</time>
-                    </dd>
-                  </div>
-                </>
-              </>
-            )}
-          </dl>
-        </div>
+        <ChatDetailsList {...chat} isDrawerOpen={isOpen} />
       </DrawerContent>
 
       <ConfirmDialog
         onClickDelete={onClickDelete}
         openState={deleteChatModalState}
         confirmButtonMessage="Delete this chat"
-        loading={loading}
+        loading={deletingChat}
         title="Are you sure you want to delete this chat?"
       />
     </>

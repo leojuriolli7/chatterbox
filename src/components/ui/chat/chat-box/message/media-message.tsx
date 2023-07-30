@@ -1,3 +1,4 @@
+import { isImage, isVideo } from "@/lib/files";
 import { cn } from "@/lib/utils";
 import { mediaModalAtom } from "@/store/media-modal";
 import type { File } from "@prisma/client";
@@ -21,9 +22,6 @@ const VideoWrapper = ({ children }: { children: React.ReactNode }) => (
 function MediaMessage({ files }: { files: File[] }) {
   const numberOfFiles = files.length;
   const setMedia = useSetAtom(mediaModalAtom);
-
-  const isImage = (file: File) => file.type === "image";
-  const isVideo = (file: File) => file.type === "video";
 
   const onClickMedia = useCallback(
     (file: File) => () => {
