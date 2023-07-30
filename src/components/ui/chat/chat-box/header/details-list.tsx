@@ -40,10 +40,10 @@ export default function ChatDetailsList({ isDrawerOpen, ...chat }: Props) {
 
   const [fetchingFiles, setFetchingFiles] = useState(true);
   const [chatFiles, setChatFiles] = useState<null | PartialFile[]>(null);
+  const chatHasFiles = !!chatFiles?.length;
+  const canRenderFiles = fetchingFiles || chatHasFiles;
 
   const otherUser = useGetOtherUser(chat);
-
-  const chatHasFiles = !!chatFiles?.length;
 
   const setMedia = useSetAtom(mediaModalAtom);
   const onClickMedia = (file: PartialFile) => () =>
@@ -136,55 +136,55 @@ export default function ChatDetailsList({ isDrawerOpen, ...chat }: Props) {
                   <time dateTime={dateToDisplay}>{dateToDisplay}</time>
                 </ListItemDescription>
               </div>
-
-              {(fetchingFiles || chatHasFiles) && (
-                <div>
-                  <ListItemTitle>Medias</ListItemTitle>
-
-                  <ListItemDescription>
-                    View all medias chared in this chat
-                  </ListItemDescription>
-
-                  <div className="flex flex-wrap gap-2 w-full mt-3">
-                    {fetchingFiles &&
-                      [1, 2, 3].map((item) => (
-                        <Skeleton className="w-24 h-24" key={item} />
-                      ))}
-
-                    {chatHasFiles &&
-                      chatFiles.map((file) => {
-                        if (isImage(file))
-                          return (
-                            <Image
-                              width={96}
-                              height={96}
-                              alt="Chat file"
-                              src={file.url}
-                              key={file.id}
-                              className="rounded-md hover:opacity-80 transition-opacity object-cover cursor-pointer"
-                              onClick={onClickMedia(file)}
-                            />
-                          );
-
-                        if (isVideo(file))
-                          return (
-                            <video
-                              width={96}
-                              height={96}
-                              className="w-24 h-24 rounded-md object-cover hover:opacity-80 transition-opacity cursor-pointer"
-                              src={file.url}
-                              key={file.id}
-                              onClick={onClickMedia(file)}
-                            />
-                          );
-
-                        return null;
-                      })}
-                  </div>
-                </div>
-              )}
             </>
           </>
+        )}
+
+        {canRenderFiles && (
+          <div>
+            <ListItemTitle>Medias</ListItemTitle>
+
+            <ListItemDescription>
+              View all medias chared in this chat
+            </ListItemDescription>
+
+            <div className="flex flex-wrap gap-2 w-full mt-3">
+              {fetchingFiles &&
+                [1, 2, 3].map((item) => (
+                  <Skeleton className="w-24 h-24" key={item} />
+                ))}
+
+              {chatHasFiles &&
+                chatFiles.map((file) => {
+                  if (isImage(file))
+                    return (
+                      <Image
+                        width={96}
+                        height={96}
+                        alt="Chat file"
+                        src={file.url}
+                        key={file.id}
+                        className="rounded-md hover:opacity-80 transition-opacity object-cover cursor-pointer"
+                        onClick={onClickMedia(file)}
+                      />
+                    );
+
+                  if (isVideo(file))
+                    return (
+                      <video
+                        width={96}
+                        height={96}
+                        className="w-24 h-24 rounded-md object-cover hover:opacity-80 transition-opacity cursor-pointer"
+                        src={file.url}
+                        key={file.id}
+                        onClick={onClickMedia(file)}
+                      />
+                    );
+
+                  return null;
+                })}
+            </div>
+          </div>
         )}
       </dl>
     </div>
