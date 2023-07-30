@@ -6,7 +6,6 @@ import type { FullMessage } from "@/types";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Message from "./message/message";
 import { pusherClient } from "@/lib/pusher";
-import find from "lodash.find";
 import useOnScreen from "@/hooks/useOnScreen";
 import { useSession } from "next-auth/react";
 import ChatMediaModal from "./media-modal";
@@ -35,13 +34,13 @@ export default function ChatBox({
   useEffect(() => {
     pusherClient.subscribe(chatId);
 
-    const messageHandler = (message: FullMessage) => {
+    const messageHandler = (newMessage: FullMessage) => {
       setMessages((current) => {
-        if (find(current, { id: message.id })) {
+        if (current?.some((m) => m?.id === newMessage.id)) {
           return current;
         }
 
-        return [...current, message];
+        return [...current, newMessage];
       });
     };
 

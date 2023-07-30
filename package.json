@@ -38,7 +38,6 @@
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.12",
     "jotai": "^2.2.2",
-    "lodash.find": "^4.6.0",
     "lucide-react": "^0.263.1",
     "next": "13.4.12",
     "next-auth": "^4.22.3",
@@ -61,7 +60,6 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
-    "@types/lodash.find": "^4.6.7",
     "@types/uuid": "^9.0.2",
     "prisma": "^5.0.0"
   }

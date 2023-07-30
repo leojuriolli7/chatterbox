@@ -12,7 +12,6 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { pusherClient } from "@/lib/pusher";
-import find from "lodash.find";
 
 type Props = {
   initialChats: ChatWithMessagesAndUsers[];
@@ -36,7 +35,7 @@ export default function ChatsList({ initialChats, users }: Props) {
 
     const newHandler = (newChat: ChatWithMessagesAndUsers) => {
       setChats((currentChats) => {
-        if (find(currentChats, { id: chatId })) {
+        if (currentChats?.some((chat) => chat?.id === newChat.id)) {
           return currentChats;
         }
 
