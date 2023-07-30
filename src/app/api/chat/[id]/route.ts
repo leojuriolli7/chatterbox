@@ -37,7 +37,7 @@ export async function DELETE(
       },
     });
 
-    await Promise.all(
+    await Promise.allSettled(
       existingChat.users.map(async (user) => {
         if (user.email) {
           await pusherServer.trigger(user.email, "chat:remove", existingChat);

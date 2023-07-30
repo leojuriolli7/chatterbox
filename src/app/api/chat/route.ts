@@ -58,7 +58,7 @@ export async function POST(request: Request) {
         },
       });
 
-      await Promise.all(
+      await Promise.allSettled(
         newGroupChat.users.map(async (user) => {
           if (user.email) {
             await pusherServer.trigger(user.email, "chat:new", newGroupChat);
@@ -105,7 +105,7 @@ export async function POST(request: Request) {
           },
         });
 
-        await Promise.all(
+        await Promise.allSettled(
           newDM.users.map(async (user) => {
             if (user.email) {
               await pusherServer.trigger(user.email, "chat:new", newDM);

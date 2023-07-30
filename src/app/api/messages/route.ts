@@ -82,7 +82,7 @@ export async function POST(request: Request) {
 
     const lastMessage = updatedChat?.messages.at(-1);
 
-    await Promise.all(
+    await Promise.allSettled(
       updatedChat?.users.map(async (user) => {
         await pusherServer.trigger(user.email as string, "chat:update", {
           id: chatId,
