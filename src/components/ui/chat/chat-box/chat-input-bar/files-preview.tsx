@@ -47,7 +47,7 @@ export default function FilesPreview({ loading }: { loading: boolean }) {
           {isVideo(file) && (
             <video
               src={file.url}
-              preload="metadata"
+              preload="auto"
               muted
               width={80}
               height={80}

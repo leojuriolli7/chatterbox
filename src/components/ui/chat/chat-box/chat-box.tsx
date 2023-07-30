@@ -121,7 +121,7 @@ export default function ChatBox({
           {...message}
         />
       ))}
-      <div ref={bottomRef} />
+      <div ref={bottomRef} className="h-1 w-full" />
 
       <ChatMediaModal />
     </div>

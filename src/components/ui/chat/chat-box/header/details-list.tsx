@@ -173,7 +173,7 @@ export default function ChatDetailsList({ isDrawerOpen, ...chat }: Props) {
                     return (
                       <video
                         width={96}
-                        preload="metadata"
+                        preload="auto"
                         height={96}
                         className="w-24 h-24 rounded-md object-cover hover:opacity-80 transition-opacity cursor-pointer"
                         src={file.url}

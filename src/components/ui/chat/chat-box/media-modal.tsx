@@ -52,7 +52,7 @@ export default function ChatMediaModal() {
             {media?.type === "video" && (
               <video
                 src={media.url}
-                preload="metadata"
+                preload="auto"
                 controls
                 autoPlay
                 muted
