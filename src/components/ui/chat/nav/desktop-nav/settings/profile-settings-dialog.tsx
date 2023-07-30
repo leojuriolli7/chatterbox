@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Dialog,
   DialogContent,
   DialogFooter,
   DialogTrigger,
@@ -28,15 +29,14 @@ import { useToast } from "@/hooks/useToast";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { v4 } from "uuid";
+import { useAtom } from "jotai";
+import { profileModalAtom } from "@/store/profile-settings-modal";
 
-type Props = User & {
-  onOpenChange(open: boolean): void;
-};
+type Props = { user: User };
 
-export default function ProfileSettingsDialog({
-  onOpenChange,
-  ...user
-}: Props) {
+export default function ProfileSettingsDialog({ user }: Props) {
+  const [settingsModalOpen, setSettingsModalOpen] = useAtom(profileModalAtom);
+
   const methods = useForm<EditProfileInput>({
     resolver: zodResolver(editProfileSchema),
     defaultValues: {
@@ -89,7 +89,7 @@ export default function ProfileSettingsDialog({
       .then((res) => {
         if (res.ok) {
           router.refresh();
-          onOpenChange(false);
+          setSettingsModalOpen(false);
           methods.reset();
         }
 
@@ -109,57 +109,59 @@ export default function ProfileSettingsDialog({
   };
 
   return (
-    <DialogContent>
-      <Form {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="space-y-12">
-            <div className="border-neutral-900/20 pb-12">
-              <h2 className="leading-7 text-2xl text-neutral-900 dark:text-neutral-200 font-semibold">
-                Update your profile
-              </h2>
+    <Dialog open={settingsModalOpen} onOpenChange={setSettingsModalOpen}>
+      <DialogContent>
+        <Form {...methods}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="space-y-12">
+              <div className="border-neutral-900/20 pb-12">
+                <h2 className="leading-7 text-2xl text-neutral-900 dark:text-neutral-200 font-semibold">
+                  Update your profile
+                </h2>
 
-              <p className="mt-1 text-sm leading-6 text-neutral-600 dark:text-neutral-400">
-                Make your profile <span className="font-bold">yours.</span>
-              </p>
+                <p className="mt-1 text-sm leading-6 text-neutral-600 dark:text-neutral-400">
+                  Make your profile <span className="font-bold">yours.</span>
+                </p>
 
-              <div className="mt-10 flex flex-col gap-8">
-                <UploadAvatar />
+                <div className="mt-10 flex flex-col gap-8">
+                  <UploadAvatar />
 
-                <FormField
-                  control={control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Username</FormLabel>
-                      <FormMessage />
-                      <FormControl>
-                        <Input
-                          {...field}
-                          type="text"
-                          placeholder="Write a username..."
-                          // fool browsers to stop autocompleting.
-                          autoComplete="nope"
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
+                  <FormField
+                    control={control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Username</FormLabel>
+                        <FormMessage />
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="text"
+                            placeholder="Write a username..."
+                            // fool browsers to stop autocompleting.
+                            autoComplete="nope"
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
             </div>
-          </div>
 
-          <DialogFooter>
-            <DialogTrigger asChild>
-              <Button variant="ghost" type="button" disabled={loading}>
-                Cancel
+            <DialogFooter>
+              <DialogTrigger asChild>
+                <Button variant="ghost" type="button" disabled={loading}>
+                  Cancel
+                </Button>
+              </DialogTrigger>
+              <Button variant="brand" loading={loading}>
+                Update
               </Button>
-            </DialogTrigger>
-            <Button variant="brand" loading={loading}>
-              Update
-            </Button>
-          </DialogFooter>
-        </form>
-      </Form>
-    </DialogContent>
+            </DialogFooter>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }

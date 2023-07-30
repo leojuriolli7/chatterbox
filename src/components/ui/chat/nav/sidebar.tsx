@@ -1,6 +1,7 @@
 import getCurrentUser from "@/app/_actions/getCurrentUser";
 import { DesktopNav } from "./desktop-nav";
 import { MobileNav } from "./mobile-nav";
+import ProfileSettingsDialog from "./desktop-nav/settings/profile-settings-dialog";
 
 export default async function Sidebar({
   children,
@@ -14,6 +15,8 @@ export default async function Sidebar({
       <DesktopNav currentUser={currentUser} />
       <MobileNav />
       <main className="lg:pl-20 h-full">{children}</main>
+
+      {currentUser && <ProfileSettingsDialog user={currentUser} />}
     </div>
   );
 }

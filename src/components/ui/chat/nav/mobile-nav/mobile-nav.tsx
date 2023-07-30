@@ -3,6 +3,7 @@
 import useGetActiveChat from "@/hooks/useGetActiveChat";
 import useGetRoutes from "@/hooks/useGetRoutes";
 import Item from "./item";
+import SettingsItem from "./settings-item";
 
 export default function MobileFooter() {
   const routes = useGetRoutes();
@@ -15,6 +16,8 @@ export default function MobileFooter() {
       {routes.map((route) => (
         <Item {...route} key={route.label} />
       ))}
+
+      <SettingsItem />
     </div>
   );
 }

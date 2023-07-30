@@ -23,17 +23,18 @@ You can create a group chat or start a DM. Users can send text messages, or uplo
 
 ### TODOS
 
-1. Optimistically send messages
-2. Add profile to mobile sidebar
+1. **Bugfix**: Videos not showing on iOS
+2. Keyboard events on chat input
 3. Conditionally render avatar and username
-4. Initial state flicker on `useGetOtherUser`
-5. Experiment converting API Routes to server actions (e.g: delete chat)
-6. Search
-7. Reading old messages indicator
-8. Forgot password flow with `nodemailer`
-9. Delete messages
-10. Roles
-11. Infinite scrolling inside chats and on user/chat list
-12. Reply
-13. Reactions
-14. Gifs
+4. Optimistically send messages
+5. Forgot password flow with `nodemailer`
+6. Initial state flicker on `useGetOtherUser`
+7. Infinite scrolling inside chats and on user/chat list
+8. Experiment converting API Routes to server actions (e.g: delete chat)
+9. Search
+10. Reading old messages indicator
+11. Delete messages
+12. Roles
+13. Reply
+14. Reactions
+15. Gifs
