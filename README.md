@@ -17,6 +17,7 @@ You can create a group chat or start a DM. Users can send text messages, or uplo
 - [Radix UI](https://www.radix-ui.com/) primitives + [Shadcn UI](https://ui.shadcn.com/)
 - [zod](https://zod.dev/) for validating forms and parsing API payloads.
 - [React Hook Form](https://react-hook-form.com/) for building forms.
+- [Jotai](https://jotai.org/) for global state.
 
 ---
 
@@ -36,3 +37,4 @@ You can create a group chat or start a DM. Users can send text messages, or uplo
 12. Reply
 13. Reactions
 14. Gifs
+15. Chat media modal
