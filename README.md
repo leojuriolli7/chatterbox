@@ -18,8 +18,7 @@ You can create a group chat or start a DM. Users can send text messages, or uplo
 - [zod](https://zod.dev/) for validating forms and parsing API payloads.
 - [React Hook Form](https://react-hook-form.com/) for building forms.
 
-
-----
+---
 
 ### TODOS
 
@@ -29,12 +28,11 @@ You can create a group chat or start a DM. Users can send text messages, or uplo
 4. Experiment converting API Routes to server actions (e.g: delete chat)
 5. Chat Medias inside details drawer
 6. Search
-7. New message indicator instead of scrolling down and marking as seen when message received
-8. Reading old messages indicator
-9. Forgot password flow with `nodemailer`
-10. Delete messages
-11. Roles
-12. Infinite scrolling inside chats and on user/chat list
-13. Reply
-14. Reactions
-15. Gifs
+7. Reading old messages indicator
+8. Forgot password flow with `nodemailer`
+9. Delete messages
+10. Roles
+11. Infinite scrolling inside chats and on user/chat list
+12. Reply
+13. Reactions
+14. Gifs
