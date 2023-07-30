@@ -54,6 +54,7 @@ export default function CreateGroupDialogContent({
       users.map((u) => ({
         name: u.name || "",
         id: u.id,
+        image: u.image,
       })),
     [users]
   );

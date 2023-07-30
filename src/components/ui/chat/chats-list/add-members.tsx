@@ -14,10 +14,12 @@ import { Command as CommandPrimitive } from "cmdk";
 import { useFormContext } from "react-hook-form";
 import type { ClientCreateGroupInput } from "@/schemas/chat.schema";
 import { Label } from "@/components/ui/label";
+import ChatAvatar from "../chat-avatar";
 
 type SelectableUser = {
   name: string;
   id: string;
+  image: string | null;
 };
 
 export function AddMembers({ users }: { users: SelectableUser[] }) {
@@ -138,9 +140,13 @@ export function AddMembers({ users }: { users: SelectableUser[] }) {
                             shouldValidate: !!error,
                           });
                         }}
-                        className={"cursor-pointer"}
+                        className="cursor-pointer"
                       >
-                        {user.name}
+                        <div className="flex gap-2 items-center">
+                          <ChatAvatar {...user} />
+
+                          <span>{user.name}</span>
+                        </div>
                       </CommandItem>
                     );
                   })

@@ -12,6 +12,7 @@ export const clientCreateGroupSchema = z.object({
     .object({
       id: z.string(),
       name: z.string(),
+      image: z.string().nullable(),
     })
     .array()
     .min(2, "Must select atleast 2 members"),

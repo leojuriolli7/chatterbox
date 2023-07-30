@@ -1,9 +1,12 @@
 import { useAtomValue } from "jotai";
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
 import { activeUsersAtom } from "@/store/active-users";
-import type { User } from "@prisma/client";
 
-type Props = User & {
+type Props = {
+  id: string;
+  name: string | null;
+  email?: string | null;
+  image: string | null;
   className?: string;
   alwaysOnline?: boolean;
 };
@@ -16,7 +19,7 @@ export default function ChatAvatar({
   alwaysOnline,
 }: Props) {
   const members = useAtomValue(activeUsersAtom);
-  const isActive = members.indexOf(email as string) !== -1;
+  const isActive = email ? members.indexOf(email) !== -1 : false;
 
   const canRenderActiveStatus = alwaysOnline === true || isActive;
 
