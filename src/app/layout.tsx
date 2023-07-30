@@ -30,10 +30,10 @@ export default function RootLayout({
       <body
         className={cn(
           inter.className,
-          "h-screen max-w-[1920px] mx-auto bg-white dark:bg-neutral-900"
+          "h-screen mx-auto bg-white dark:bg-neutral-900"
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>
             <ActiveStatus />
             {children}

@@ -10,7 +10,7 @@ export default async function Sidebar({
   const currentUser = await getCurrentUser();
 
   return (
-    <div className="h-full relative">
+    <div className="h-full relative max-w-[1920px] mx-auto">
       <DesktopNav currentUser={currentUser} />
       <MobileNav />
       <main className="lg:pl-20 h-full">{children}</main>
