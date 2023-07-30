@@ -46,7 +46,7 @@ export default function Header(chat: Props) {
 
           <DrawerTrigger asChild>
             <div
-              className="flex gap-3 items-center cursor-pointer"
+              className="flex gap-3 items-center cursor-pointer appearance-none"
               role="button"
             >
               {chat.isGroup ? (

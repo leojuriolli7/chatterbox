@@ -11,7 +11,7 @@ export default function LoadingDialog() {
         <DialogOverlay className="backdrop-blur-md" />
 
         <DialogPrimitive.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50">
-          <Loader2 className="animate-spin w-10 h-10 text-black dark:text-white" />
+          <Loader2 className="animate-spin w-10 h-10 text-black dark:text-white focus:ring-0 focus-visible:ring-0" />
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </Dialog>
