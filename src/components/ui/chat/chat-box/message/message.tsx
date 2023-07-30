@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import type { FullMessage } from "@/types";
 import { useSession } from "next-auth/react";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import ChatAvatar from "../../chat-avatar";
 import { format } from "date-fns";
 import MediaMessage from "./media-message";
@@ -11,14 +11,7 @@ type Props = FullMessage & {
   isLast: boolean;
 };
 
-export default function Message({
-  isLast,
-  sender,
-  seen,
-  files,
-  body,
-  ...message
-}: Props) {
+function Message({ isLast, sender, seen, files, body, ...message }: Props) {
   const { data: session } = useSession();
   const isOwnMessage = session?.user?.email === sender.email;
   const hasFiles = !!files?.length;
@@ -75,3 +68,5 @@ export default function Message({
     </div>
   );
 }
+
+export default memo(Message);

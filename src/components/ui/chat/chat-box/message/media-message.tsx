@@ -1,7 +1,10 @@
 import { cn } from "@/lib/utils";
+import { mediaModalAtom } from "@/store/media-modal";
 import type { File } from "@prisma/client";
+import { useSetAtom } from "jotai";
 import { Play } from "lucide-react";
 import Image from "next/image";
+import { memo, useCallback } from "react";
 
 const singleMediaClass = "rounded-md max-w-[256px]";
 const mediumMediaClass = "object-cover rounded-md w-32 h-32";
@@ -15,11 +18,22 @@ const VideoWrapper = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
-export default function MediaMessage({ files }: { files: File[] }) {
+function MediaMessage({ files }: { files: File[] }) {
   const numberOfFiles = files.length;
+  const setMedia = useSetAtom(mediaModalAtom);
 
   const isImage = (file: File) => file.type === "image";
   const isVideo = (file: File) => file.type === "video";
+
+  const onClickMedia = useCallback(
+    (file: File) => () => {
+      setMedia({
+        url: file.url,
+        type: file.type,
+      });
+    },
+    [setMedia]
+  );
 
   return (
     <div
@@ -31,9 +45,10 @@ export default function MediaMessage({ files }: { files: File[] }) {
       {files.map((file) => {
         const isSingleMedia = numberOfFiles === 1;
 
-        const mediaClassName = isSingleMedia
-          ? singleMediaClass
-          : mediumMediaClass;
+        const mediaClassName = cn(
+          "cursor-pointer hover:opacity-90",
+          isSingleMedia ? singleMediaClass : mediumMediaClass
+        );
 
         const dimensions = isSingleMedia ? 256 : 128;
 
@@ -46,6 +61,7 @@ export default function MediaMessage({ files }: { files: File[] }) {
               width={dimensions}
               height={dimensions}
               className={mediaClassName}
+              onClick={onClickMedia(file)}
             />
           );
         }
@@ -58,6 +74,7 @@ export default function MediaMessage({ files }: { files: File[] }) {
                 width={dimensions}
                 height={dimensions}
                 className={mediaClassName}
+                onClick={onClickMedia(file)}
               />
             </VideoWrapper>
           );
@@ -66,3 +83,5 @@ export default function MediaMessage({ files }: { files: File[] }) {
     </div>
   );
 }
+
+export default memo(MediaMessage);

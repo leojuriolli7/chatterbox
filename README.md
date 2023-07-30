@@ -37,4 +37,3 @@ You can create a group chat or start a DM. Users can send text messages, or uplo
 12. Reply
 13. Reactions
 14. Gifs
-15. Chat media modal

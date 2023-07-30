@@ -9,6 +9,7 @@ import { pusherClient } from "@/lib/pusher";
 import find from "lodash.find";
 import useOnScreen from "@/hooks/useOnScreen";
 import { useSession } from "next-auth/react";
+import ChatMediaModal from "./media-modal";
 
 export default function ChatBox({
   initialMessages,
@@ -121,6 +122,8 @@ export default function ChatBox({
         />
       ))}
       <div ref={bottomRef} />
+
+      <ChatMediaModal />
     </div>
   );
 }
