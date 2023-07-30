@@ -6,11 +6,11 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { pusherServer } from "@/lib/pusher";
 
-export default function handler(
+export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
-  const session = { user: { email: undefined } };
+  const session = await getServerSession(request, response, authOptions);
 
   if (!session?.user?.email) {
     return response.status(401);
