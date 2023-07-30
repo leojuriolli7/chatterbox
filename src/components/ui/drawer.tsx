@@ -19,7 +19,7 @@ const DrawerOverlay = React.forwardRef<
   <Dialog.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 z-50 bg-white/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 dark:bg-neutral-950/80",
+      "fixed overflow-y-auto inset-0 z-50 bg-white/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 dark:bg-neutral-950/80",
       className
     )}
     {...props}

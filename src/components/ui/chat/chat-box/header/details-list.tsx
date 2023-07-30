@@ -164,7 +164,7 @@ export default function ChatDetailsList({ isDrawerOpen, ...chat }: Props) {
                         alt="Chat file"
                         src={file.url}
                         key={file.id}
-                        className="rounded-md hover:opacity-80 transition-opacity object-cover cursor-pointer"
+                        className="rounded-md hover:opacity-80 transition-opacity object-cover cursor-pointer w-24 h-24"
                         onClick={onClickMedia(file)}
                       />
                     );
