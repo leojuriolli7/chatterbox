@@ -1,4 +1,4 @@
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 
 // wrapper around `getServerSession` to avoid having

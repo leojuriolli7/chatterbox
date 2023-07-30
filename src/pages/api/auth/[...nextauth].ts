@@ -63,7 +63,4 @@ export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 };
 
-const handler = NextAuth(authOptions);
-
-// required for app router
-export { handler as GET, handler as POST };
+export default NextAuth(authOptions);
