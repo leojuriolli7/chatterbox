@@ -1,31 +1,31 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { pusherServer } from "@/lib/pusher";
+import { pusherAuthSchema } from "@/schemas/auth.schema";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { pusherServer } from "@/lib/pusher";
-
 export default async function handler(
-  request: NextApiRequest,
-  response: NextApiResponse
+  req: NextApiRequest,
+  res: NextApiResponse
 ) {
-  const session = await getServerSession(request, response, authOptions);
+  const session = await getServerSession(req, res, authOptions);
 
-  if (!session?.user?.email) {
-    return response.status(401);
-  }
+  if (!session?.user?.email) return res.status(401);
 
-  const socketId = request.body.socket_id;
-  const channel = request.body.channel_name;
+  const bodyParsing = pusherAuthSchema.safeParse(req.body);
+
+  if (!bodyParsing.success) return res.status(400);
+
+  const socketId = bodyParsing.data.socket_id;
+  const channel = bodyParsing.data.channel_name;
+
+  // when a user becomes active, pusher will send their email
+  // as `id`
   const data = {
     user_id: session.user.email,
   };
 
-  const authResponse = pusherServer.authorizeChannel(
-    socketId as string,
-    channel as string,
-    data
-  );
-  return response.send(authResponse);
+  const authResponse = pusherServer.authorizeChannel(socketId, channel, data);
+
+  return res.send(authResponse);
 }
