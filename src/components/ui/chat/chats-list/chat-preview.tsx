@@ -19,11 +19,7 @@ export default function ChatPreview({ selected, ...chat }: Props) {
   const otherUser = useGetOtherUser(chat);
   const { messages, id, name } = chat;
 
-  const last = useMemo(() => {
-    const chatMessages = messages || [];
-
-    return chatMessages.at(-1);
-  }, [messages]);
+  const last = (messages || []).at(-1);
 
   const hasSeen = useMemo(() => {
     if (!last) return false;
