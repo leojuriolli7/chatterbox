@@ -1,12 +1,12 @@
 import useGetOtherUser from "@/hooks/useGetOtherUser";
 import { cn } from "@/lib/utils";
 import type { ChatWithMessagesAndUsers } from "@/types";
-import { format } from "date-fns";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useMemo } from "react";
 import ChatAvatar from "../chat-avatar";
 import GroupAvatar from "../group-avatar";
+import { formatLastMessageDate } from "./utils";
 
 type Props = ChatWithMessagesAndUsers & {
   selected?: boolean;
@@ -33,6 +33,7 @@ export default function ChatPreview({ selected, ...chat }: Props) {
     return seenArray.some((user) => user.email === userEmail);
     // necessary because this was not updating when
     // user read the last message.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [last, userEmail, last?.seenIds.length]);
 
   const lastMessageText = useMemo(() => {
@@ -44,8 +45,9 @@ export default function ChatPreview({ selected, ...chat }: Props) {
       sender?.email !== session?.user?.email;
 
     const canRenderPrefix = isAnotherUser && chat.isGroup === true;
+    const firstName = sender?.name?.split(" ")?.[0] || "";
 
-    const messagePrefix = canRenderPrefix ? `${sender.name as string}: ` : "";
+    const messagePrefix = canRenderPrefix ? `${firstName}: ` : "";
     const getText = (value: string) => `${messagePrefix}${value}`;
 
     if (!!last?.body) return getText(last.body);
@@ -78,7 +80,7 @@ export default function ChatPreview({ selected, ...chat }: Props) {
               </p>
               {last?.createdAt && (
                 <p className="text-xs text-neutral-500 font-light">
-                  {format(new Date(last?.createdAt), "p")}
+                  {formatLastMessageDate(last?.createdAt)}
                 </p>
               )}
             </div>

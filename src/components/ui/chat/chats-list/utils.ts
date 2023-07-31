@@ -1,5 +1,6 @@
 import type { ChatWithMessagesAndUsers, UpdateChatEventPayload } from "@/types";
-
+import { differenceInDays, isToday, isYesterday } from "date-fns";
+import format from "date-fns/format";
 export function updateSeenFromLastMessage<T extends ChatWithMessagesAndUsers>(
   chats: T[],
   payload: UpdateChatEventPayload
@@ -61,4 +62,53 @@ export function addNewLastMessage<T extends ChatWithMessagesAndUsers>(
   }
 
   return updatedArray;
+}
+
+const patterns = {
+  date: "MM/dd/yyyy",
+  time: "HH:mm",
+  shortDate: "MMM dd, yyyy",
+  dayAndMonth: "dd/MM",
+  smart: "MMM dd, yyyy",
+  dayOfWeek: "EEEE",
+} as const;
+type Pattern = keyof typeof patterns;
+
+export function formatLastMessageDate(date: Date) {
+  if (!date) {
+    return "";
+  }
+
+  let pattern: Pattern = "time";
+
+  const diffInDays = differenceInDays(new Date(), date);
+  const isThisWeek = diffInDays <= 7;
+  const notThisWeek = diffInDays > 7;
+  const isThisYear = diffInDays <= 365;
+  const isMoreThanOneYearOld = diffInDays > 365;
+
+  if (!isToday(date) && isThisWeek) {
+    if (isYesterday(date)) {
+      return "Yesterday";
+    } else {
+      pattern = "dayOfWeek";
+    }
+  }
+
+  if (notThisWeek && isThisYear) {
+    pattern = "dayAndMonth";
+  }
+
+  if (isMoreThanOneYearOld) {
+    pattern = "shortDate";
+  }
+
+  try {
+    const formattedDate = format(new Date(date), patterns[pattern || "date"]);
+
+    return formattedDate;
+  } catch (e) {
+    console.log("e:", e);
+    return "";
+  }
 }
