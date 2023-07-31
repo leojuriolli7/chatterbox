@@ -2,8 +2,10 @@ import type { ChatWithMessagesAndUsers, UpdateChatEventPayload } from "@/types";
 
 export function updateSeenFromLastMessage<T extends ChatWithMessagesAndUsers>(
   chats: T[],
-  { id, messageId, currentUser }: UpdateChatEventPayload
+  payload: UpdateChatEventPayload
 ): T[] {
+  const { id, messageId, currentUser } = payload;
+
   const chatMap: { [id: string]: T } = {};
 
   // Build the map with "id" as the key for faster access

@@ -24,14 +24,16 @@ export default function ChatPreview({ selected, ...chat }: Props) {
   const hasSeen = useMemo(() => {
     if (!last) return false;
 
-    const seenArray = last.seen || [];
-
     if (!userEmail) {
       return false;
     }
 
+    const seenArray = last?.seen || [];
+
     return seenArray.some((user) => user.email === userEmail);
-  }, [last, userEmail]);
+    // necessary because this was not updating when
+    // user read the last message.
+  }, [last, userEmail, last?.seenIds.length]);
 
   const lastMessageText = useMemo(() => {
     if (!!last?.body) return last?.body;
