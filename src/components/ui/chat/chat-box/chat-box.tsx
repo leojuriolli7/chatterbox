@@ -115,7 +115,7 @@ export default function ChatBox({
   }, [isAtBottom, lastMessage]);
 
   return (
-    <div className="relative flex-1 overflow-y-auto" ref={listRef}>
+    <div className="relative flex-1 overflow-y-auto px-3 pt-4" ref={listRef}>
       {hasNewMessage && (
         <button
           onClick={onClickNewMessageIndicator}
@@ -126,13 +126,22 @@ export default function ChatBox({
           <p className="text-white text-sm">Click to scroll down</p>
         </button>
       )}
-      {messages?.map((message, i) => (
-        <Message
-          isLast={i === messages.length - 1}
-          key={message.id}
-          {...message}
-        />
-      ))}
+      {messages?.map((message, i) => {
+        const lastMessage = messages?.[i - 1];
+        const isLastMessageAuthor =
+          !!lastMessage && lastMessage?.sender.id === message?.sender.id;
+
+        const canRenderAuthor = !isLastMessageAuthor || !lastMessage;
+
+        return (
+          <Message
+            isLast={i === messages.length - 1}
+            key={message.id}
+            canRenderAuthor={canRenderAuthor}
+            {...message}
+          />
+        );
+      })}
       <div ref={bottomRef} className="h-1 w-full" />
 
       <ChatMediaModal />

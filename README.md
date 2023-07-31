@@ -58,18 +58,17 @@ ESLint is also configured with strict rules to ensure code quality and minimize 
 3. Forgot password flow with `nodemailer`
 4. **Bugfix**: Videos not showing on iOS
 5. Keyboard events on chat input
-6. Conditionally render avatar and username
-7. Optimistically send messages
-8. Invite new users to group chat
-9. Leaving GCs
-10. Roles
-11. Initial state flicker on `useGetOtherUser`
-12. Infinite scrolling inside chats and on user/chat list
-13. Experiment converting API Routes to server actions (e.g: delete chat)
-14. Search
-15. Reading old messages indicator
-16. Delete messages
-17. Reply
-18. Reactions
-19. Gifs
-20. Mute chats
+6. Optimistically send messages
+7. Invite new users to group chat
+8. Leaving GCs
+9. Roles
+10. Initial state flicker on `useGetOtherUser`
+11. Infinite scrolling inside chats and on user/chat list
+12. Experiment converting API Routes to server actions (e.g: delete chat)
+13. Search
+14. Reading old messages indicator
+15. Delete messages
+16. Reply
+17. Reactions
+18. Gifs
+19. Mute chats

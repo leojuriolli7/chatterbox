@@ -36,12 +36,24 @@ export default function ChatPreview({ selected, ...chat }: Props) {
   }, [last, userEmail, last?.seenIds.length]);
 
   const lastMessageText = useMemo(() => {
-    if (!!last?.body) return last?.body;
+    const sender = last?.sender;
 
-    if (!!last?.files) return "Sent files";
+    const isAnotherUser =
+      !!sender &&
+      !!session?.user?.email &&
+      sender?.email !== session?.user?.email;
+
+    const canRenderPrefix = isAnotherUser && chat.isGroup === true;
+
+    const messagePrefix = canRenderPrefix ? `${sender.name as string}: ` : "";
+    const getText = (value: string) => `${messagePrefix}${value}`;
+
+    if (!!last?.body) return getText(last.body);
+
+    if (!!last?.files) return getText("Sent files");
 
     return "Started a chat";
-  }, [last]);
+  }, [last, session, chat?.isGroup]);
 
   return (
     <Link href={`/chats/${id}`}>
