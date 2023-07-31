@@ -82,7 +82,7 @@ export default function ChatsList({ initialChats, users }: Props) {
       )}
     >
       <div className="px-5">
-        <div className="flex justify-between my-4">
+        <div className="flex justify-between py-4 sticky top-0 bg-white dark:bg-neutral-925 z-10">
           <h2 className="text-2xl font-bold text-neutral-800 dark:text-neutral-400">
             Chats
           </h2>

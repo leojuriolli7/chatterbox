@@ -31,7 +31,9 @@ function Message({ isLast, sender, seen, files, body, ...message }: Props) {
   }, [seen, sender]);
 
   return (
-    <div className={cn("flex gap-3 p-4", isOwnMessage && "justify-end")}>
+    <div
+      className={cn("flex gap-3 p-4 relative", isOwnMessage && "justify-end")}
+    >
       <div className={cn(isOwnMessage && "order-2")}>
         <ChatAvatar {...sender} />
       </div>
@@ -49,10 +51,10 @@ function Message({ isLast, sender, seen, files, body, ...message }: Props) {
 
         <div
           className={cn(
-            "text-sm w-fit break-words py-2 px-3",
+            "text-sm w-fit break-words relative py-2 px-3 after:content-[''] after:absolute after:top-0 after:w-[17px] after:h-[17px]",
             isOwnMessage
-              ? "bg-blue-500 text-white"
-              : "bg-neutral-100 dark:bg-neutral-700",
+              ? "bg-blue-500 text-white after:bg-blue-500 after:right-0 after:rounded-bl-full"
+              : "bg-neutral-100 dark:bg-neutral-700 after:bg-neutral-100 after:dark:bg-neutral-700 after:left-0 after:rounded-br-full",
             hasFiles ? "rounded-md" : "rounded-full"
           )}
         >
