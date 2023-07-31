@@ -2,7 +2,7 @@
 
 import useGetActiveChat from "@/hooks/useGetActiveChat";
 import { cn } from "@/lib/utils";
-import type { ChatWithMessagesAndUsers } from "@/types";
+import type { ChatWithMessagesAndUsers, UpdateChatEventPayload } from "@/types";
 import { UserPlus2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import ChatPreview from "./chat-preview";
@@ -12,6 +12,7 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { pusherClient } from "@/lib/pusher";
+import { addNewLastMessage, updateSeenFromLastMessage } from "./utils";
 
 type Props = {
   initialChats: ChatWithMessagesAndUsers[];
@@ -43,19 +44,12 @@ export default function ChatsList({ initialChats, users }: Props) {
       });
     };
 
-    const updateHandler = (newChat: ChatWithMessagesAndUsers) => {
-      setChats((current) =>
-        current.map((oldChat) => {
-          if (oldChat.id === newChat.id) {
-            return {
-              ...oldChat,
-              messages: newChat.messages,
-            };
-          }
+    const updateHandler = (payload: ChatWithMessagesAndUsers) => {
+      setChats((current) => addNewLastMessage(current, payload));
+    };
 
-          return oldChat;
-        })
-      );
+    const updateSeenHandler = (payload: UpdateChatEventPayload) => {
+      setChats((current) => updateSeenFromLastMessage(current, payload));
     };
 
     const removeHandler = (deletedChat: ChatWithMessagesAndUsers) => {
@@ -68,12 +62,14 @@ export default function ChatsList({ initialChats, users }: Props) {
 
     pusherClient.bind("chat:new", newHandler);
     pusherClient.bind("chat:update", updateHandler);
+    pusherClient.bind("chat:updateSeen", updateSeenHandler);
     pusherClient.bind("chat:remove", removeHandler);
 
     return () => {
       pusherClient.unsubscribe(pusherKey);
       pusherClient.unbind("chat:new", newHandler);
       pusherClient.unbind("chat:update", updateHandler);
+      pusherClient.unbind("chat:updateSeen", updateSeenHandler);
       pusherClient.unbind("chat:remove", removeHandler);
     };
   }, [chatId, pusherKey, router]);

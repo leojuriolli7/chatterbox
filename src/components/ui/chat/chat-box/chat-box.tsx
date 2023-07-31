@@ -2,7 +2,7 @@
 "use client";
 
 import useGetActiveChat from "@/hooks/useGetActiveChat";
-import type { FullMessage } from "@/types";
+import type { FullMessage, SeenEventPayload } from "@/types";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Message from "./message/message";
 import { pusherClient } from "@/lib/pusher";
@@ -21,6 +21,8 @@ export default function ChatBox({
   const { data: session } = useSession();
 
   const lastMessage = useMemo(() => messages.at(-1), [messages]);
+
+  const listRef = useRef<HTMLDivElement>(null);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const isAtBottom = useOnScreen(bottomRef);
@@ -44,10 +46,15 @@ export default function ChatBox({
       });
     };
 
-    const updateMessageHandler = (newMessage: FullMessage) => {
+    const updateMessageHandler = (newMessage: SeenEventPayload) => {
       setMessages((current) =>
         current.map((currentMessage) => {
-          if (currentMessage.id === newMessage.id) return newMessage;
+          if (currentMessage.id === newMessage.id)
+            return {
+              ...currentMessage,
+              seen: newMessage.seen,
+              seenIds: newMessage.seenIds,
+            };
 
           return currentMessage;
         })
@@ -94,7 +101,13 @@ export default function ChatBox({
     const userHasNotReadLastMessage = !lastMessage?.seen.some(
       (user) => user.email === session?.user?.email
     );
-    if (isAtBottom && userHasNotReadLastMessage) {
+
+    const listCanScroll = listRef.current
+      ? listRef.current.clientHeight < listRef.current.scrollHeight
+      : undefined;
+
+    const canMarkAsSeen = isAtBottom || !listCanScroll;
+    if (canMarkAsSeen && userHasNotReadLastMessage) {
       void fetch(`/api/chat/${chatId}/seen`, {
         method: "POST",
       });
@@ -102,7 +115,7 @@ export default function ChatBox({
   }, [isAtBottom, lastMessage]);
 
   return (
-    <div className="relative flex-1 overflow-y-auto">
+    <div className="relative flex-1 overflow-y-auto" ref={listRef}>
       {hasNewMessage && (
         <button
           onClick={onClickNewMessageIndicator}

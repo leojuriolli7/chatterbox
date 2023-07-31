@@ -55,9 +55,15 @@ export async function POST(request: Request, { params }: { params: Params }) {
     });
 
     if (!!currentUser?.email) {
-      await pusherServer.trigger(currentUser.email, "chat:update", {
+      const userToSend = currentUser;
+      userToSend.chatIds = [];
+      userToSend.seenMessageIds = [];
+
+      // update chat with new seen from lastMessage
+      await pusherServer.trigger(currentUser.email, "chat:updateSeen", {
         id: chatId,
-        messages: [updatedMessage],
+        messageId: updatedMessage.id,
+        currentUser: userToSend,
       });
     }
 
@@ -66,7 +72,12 @@ export async function POST(request: Request, { params }: { params: Params }) {
       return NextResponse.json(chat);
     }
 
-    await pusherServer.trigger(chatId, "message:update", updatedMessage);
+    // update message with new seen
+    await pusherServer.trigger(chatId, "message:update", {
+      seen: updatedMessage.seen,
+      seenIds: updatedMessage.seenIds,
+      id: updatedMessage.id,
+    });
 
     return NextResponse.json(updatedMessage);
   } catch (e) {
