@@ -78,7 +78,23 @@ export async function POST(request: Request) {
       },
     });
 
-    await pusherServer.trigger(chatId, "messages:new", newMessage);
+    const newMessageToSend = {
+      ...newMessage,
+      seen: [
+        {
+          ...newMessage.seen[0],
+          chatIds: [],
+          seenMessageIds: [],
+        },
+      ],
+      sender: {
+        ...newMessage.sender,
+        chatIds: [],
+        seenMessageIds: [],
+      },
+    };
+
+    await pusherServer.trigger(chatId, "messages:new", newMessageToSend);
 
     const lastMessage = updatedChat?.messages.at(-1);
 
