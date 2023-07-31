@@ -2,7 +2,7 @@
 
 Chatterbox is a realtime messaging application built with [Next 13](https://nextjs.org/) and [Pusher](https://pusher.com/).
 
-You can create a group chat or start a DM. Users can send text messages, or upload multiple videos or images. 
+You can create a group chat or start a DM. Users can send text messages, or upload multiple videos or images.
 
 The UI is updated in realtime. Meaning when a channel is created by another user, or when a message is sent, you will instantly see the update.
 
@@ -21,32 +21,29 @@ The UI is updated in realtime. Meaning when a channel is created by another user
 - [React Hook Form](https://react-hook-form.com/) for building forms.
 - [Jotai](https://jotai.org/) for global state.
 
-
 ## Next 13
 
 This project uses the new Next.js 13 App Router, React Server Components, server actions, suspense and React 18's `cache()`
 
-  We also make use of API Routes (Deployed as serverless functions to Vercel) for actions like registering a new user, creating a message, etc. 
+We also make use of API Routes (Deployed as serverless functions to Vercel) for actions like registering a new user, creating a message, etc.
 
+## Realtime
 
-  ## Realtime
+Whenever a user sends a message, creates a chat, or comes on-line for example, all other users will be notified and their UI will be updated in realtime.
 
-  Whenever a user sends a message, creates a chat, or comes on-line for example, all other users will be notified and their UI will be updated in realtime.
+This is done with Pusher. We **listen to events** like `message:new` or `chat:update`. When a user makes an action, we **trigger** the event on the server, and other user's listening will receive the updates.
 
-  This is done with Pusher. We **listen to events** like `message:new` or `chat:update`. When a user makes an action, we **trigger** the event on the server, and other user's listening will receive the updates.
+### Presence
 
-  ### Presence
+Besides listening and triggering events, Pusher's [presence channels](https://pusher.com/docs/channels/using_channels/presence-channels/) is used to get every user currently online.
 
-  Besides listening and triggering events,  Pusher's [presence channels](https://pusher.com/docs/channels/using_channels/presence-channels/) is used to get every user currently online.
-
-  When a user logs in, we get every active user from Pusher and store them in a local jotai store. When a user logs in or logs off, Pusher sends an update and we update the jotai store locally.
-
+When a user logs in, we get every active user from Pusher and store them in a local jotai store. When a user logs in or logs off, Pusher sends an update and we update the jotai store locally.
 
 ## Typescript
 
 This project is written in Typescript and uses **Prisma generated types** & **zod schemas** and types to ensure typesafety across the codebase. Because Prisma auto-generates types, we rarely have to declare or maintain any types.
 
- `zod` is used to validate every form client-side to ensure the values are correct before doing any API calls or mutations.
+`zod` is used to validate every form client-side to ensure the values are correct before doing any API calls or mutations.
 
 On the server, every API route also has zod validation to ensure the input is valid and corresponds to the zod schema before proceeding.
 
@@ -56,22 +53,23 @@ ESLint is also configured with strict rules to ensure code quality and minimize 
 
 ### TODOS
 
-1. Change password in settings modal
-2. Forgot password flow with `nodemailer`
-3. **Bugfix**: Videos not showing on iOS
-4. Keyboard events on chat input
-5. Conditionally render avatar and username
-6. Optimistically send messages
-7. Invite new users to group chat
-8. Leaving GCs
-9. Roles
-10. Initial state flicker on `useGetOtherUser`
-11. Infinite scrolling inside chats and on user/chat list
-12. Experiment converting API Routes to server actions (e.g: delete chat)
-13. Search
-14. Reading old messages indicator
-15. Delete messages
-16. Reply
-17. Reactions
-18. Gifs
-19. Mute chats
+1. Cleanup realtime events, only send necessary data
+2. Change password in settings modal
+3. Forgot password flow with `nodemailer`
+4. **Bugfix**: Videos not showing on iOS
+5. Keyboard events on chat input
+6. Conditionally render avatar and username
+7. Optimistically send messages
+8. Invite new users to group chat
+9. Leaving GCs
+10. Roles
+11. Initial state flicker on `useGetOtherUser`
+12. Infinite scrolling inside chats and on user/chat list
+13. Experiment converting API Routes to server actions (e.g: delete chat)
+14. Search
+15. Reading old messages indicator
+16. Delete messages
+17. Reply
+18. Reactions
+19. Gifs
+20. Mute chats

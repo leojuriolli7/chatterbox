@@ -52,7 +52,7 @@ export default function ChatsList({ initialChats, users }: Props) {
       setChats((current) => updateSeenFromLastMessage(current, payload));
     };
 
-    const removeHandler = (deletedChat: ChatWithMessagesAndUsers) => {
+    const removeHandler = (deletedChat: { id: string }) => {
       setChats((current) => [
         ...current.filter((chat) => chat.id !== deletedChat.id),
       ]);

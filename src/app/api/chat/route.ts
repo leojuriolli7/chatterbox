@@ -58,10 +58,19 @@ export async function POST(request: Request) {
         },
       });
 
+      const usersToSend = newGroupChat.users.map((user) => ({
+        ...user,
+        seenMessageIds: [],
+        chatIds: [],
+      }));
+
       await Promise.allSettled(
         newGroupChat.users.map(async (user) => {
           if (user.email) {
-            await pusherServer.trigger(user.email, "chat:new", newGroupChat);
+            await pusherServer.trigger(user.email, "chat:new", {
+              ...newGroupChat,
+              users: usersToSend,
+            });
           }
         })
       );
@@ -105,10 +114,19 @@ export async function POST(request: Request) {
           },
         });
 
+        const usersToSend = newDM.users.map((user) => ({
+          ...user,
+          seenMessageIds: [],
+          chatIds: [],
+        }));
+
         await Promise.allSettled(
           newDM.users.map(async (user) => {
             if (user.email) {
-              await pusherServer.trigger(user.email, "chat:new", newDM);
+              await pusherServer.trigger(user.email, "chat:new", {
+                ...newDM,
+                users: usersToSend,
+              });
             }
           })
         );
