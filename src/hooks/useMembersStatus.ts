@@ -1,18 +1,22 @@
 import { pusherClient } from "@/lib/pusher";
 import { activeUsersAtom } from "@/store/active-users";
 import { useSetAtom } from "jotai";
+import { useSession } from "next-auth/react";
 import type { Channel, Members } from "pusher-js";
 import { useEffect, useState } from "react";
 
 const useMembersStatus = () => {
   const setActiveUsers = useSetAtom(activeUsersAtom);
   const [activeChannel, setActiveChannel] = useState<Channel | null>(null);
+  const { status } = useSession();
 
   useEffect(() => {
     let channel = activeChannel;
 
+    if (status !== "authenticated") return;
+
     if (!channel) {
-      channel = pusherClient.subscribe("presence-messenger");
+      channel = pusherClient.subscribe("presence-chatterbox");
       setActiveChannel(channel);
     }
 
@@ -41,11 +45,11 @@ const useMembersStatus = () => {
 
     return () => {
       if (activeChannel) {
-        pusherClient.unsubscribe("presence-messenger");
+        pusherClient.unsubscribe("presence-chatterbox");
         setActiveChannel(null);
       }
     };
-  }, [activeChannel, setActiveUsers]);
+  }, [activeChannel, setActiveUsers, status]);
 };
 
 export default useMembersStatus;
