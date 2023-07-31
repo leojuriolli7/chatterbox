@@ -36,7 +36,7 @@ const DrawerContent = React.forwardRef<
     <Dialog.Content
       ref={ref}
       className={cn(
-        "fixed right-0 top-0 h-screen z-50 overflow-y-auto w-full max-w-lg border border-neutral-200 bg-white p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0  data-[state=closed]:slide-out-to-right-1/2  data-[state=open]:slide-in-from-right-1/2 md:w-full dark:border-neutral-800 dark:bg-neutral-900",
+        "fixed right-0 top-0 sm:h-screen h-[100dvh] z-50 overflow-y-auto w-full max-w-lg border border-neutral-200 bg-white p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0  data-[state=closed]:slide-out-to-right-1/2  data-[state=open]:slide-in-from-right-1/2 md:w-full dark:border-neutral-800 dark:bg-neutral-900",
         className
       )}
       {...props}

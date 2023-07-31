@@ -4,7 +4,7 @@ import useGetActiveChat from "@/hooks/useGetActiveChat";
 import { cn } from "@/lib/utils";
 import type { ChatWithMessagesAndUsers, UpdateChatEventPayload } from "@/types";
 import { UserPlus2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ChatPreview from "./chat-preview";
 import type { User } from "@prisma/client";
 import CreateGroupDialogContent from "./create-group-dialog";
@@ -26,6 +26,7 @@ export default function ChatsList({ initialChats, users }: Props) {
 
   const [chats, setChats] = useState(initialChats);
   const [createGroupOpen, setCreateGroupOpen] = useState(false);
+  const chatsListRef = useRef<HTMLDivElement>(null);
 
   const pusherKey = session?.user?.email;
 
@@ -46,6 +47,17 @@ export default function ChatsList({ initialChats, users }: Props) {
 
     const updateHandler = (payload: ChatWithMessagesAndUsers) => {
       setChats((current) => addNewLastMessage(current, payload));
+
+      const newMessage = payload?.messages?.[0];
+
+      // if the logged in user sent a message,
+      // we scroll the list back to the top.
+      if (newMessage?.senderId === session.user.id) {
+        chatsListRef.current?.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      }
     };
 
     const updateSeenHandler = (payload: UpdateChatEventPayload) => {
@@ -72,10 +84,11 @@ export default function ChatsList({ initialChats, users }: Props) {
       pusherClient.unbind("chat:updateSeen", updateSeenHandler);
       pusherClient.unbind("chat:remove", removeHandler);
     };
-  }, [chatId, pusherKey, router]);
+  }, [chatId, pusherKey, router, session]);
 
   return (
     <aside
+      ref={chatsListRef}
       className={cn(
         "absolute inset-y-0 pb-20 bg-white dark:bg-neutral-925 lg:pb-0 lg:left-20 lg:w-80 lg:block overflow-y-auto border-r border-neutral-200 dark:border-neutral-800",
         isOpen ? "hidden" : "block w-full left-0"

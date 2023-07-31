@@ -51,24 +51,29 @@ ESLint is also configured with strict rules to ensure code quality and minimize 
 
 ---
 
+# <img src="./public/images/logo.png" width="50" height="50" />
+
 ### TODOS
 
-1. Cleanup realtime events, only send necessary data
-2. Change password in settings modal
-3. Forgot password flow with `nodemailer`
-4. **Bugfix**: Videos not showing on iOS
+1. Send less data through pusher
+2. "Today", "Yesterday", etc. indicators
+3. Search channels and users
+4. Delete messages
 5. Keyboard events on chat input
-6. Optimistically send messages
-7. Invite new users to group chat
-8. Leaving GCs
-9. Roles
-10. Initial state flicker on `useGetOtherUser`
-11. Infinite scrolling inside chats and on user/chat list
-12. Experiment converting API Routes to server actions (e.g: delete chat)
-13. Search
-14. Reading old messages indicator
-15. Delete messages
-16. Reply
-17. Reactions
-18. Gifs
-19. Mute chats
+6. Change password in settings modal
+7. Forgot password flow with `nodemailer`
+8. **Bugfix**: Videos not showing on iOS
+9. Invite new users to group chat
+10. Leaving GCs
+11. Roles
+12. Mute chats
+13. Optimistically send messages
+14. Initial state flicker on `useGetOtherUser`
+15. Infinite scrolling inside chats and on user/chat list
+16. Experiment converting API Routes to server actions (e.g: delete chat)
+17. Search
+18. Reading old messages indicator
+19. Reply
+20. Reactions
+21. Gifs
+22. Mentions

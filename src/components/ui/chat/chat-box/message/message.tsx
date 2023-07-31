@@ -40,7 +40,13 @@ function Message({
   }, [seen, sender]);
 
   return (
-    <div className={cn("flex gap-3 pt-2", isOwnMessage && "justify-end")}>
+    <div
+      className={cn(
+        "flex gap-3 pt-2",
+        isOwnMessage && "justify-end",
+        isLast && "pb-2"
+      )}
+    >
       <div className={cn("h-10 w-10", isOwnMessage && "order-2")}>
         {canRenderAuthor && <ChatAvatar {...sender} />}
       </div>

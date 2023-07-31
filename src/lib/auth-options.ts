@@ -11,6 +11,15 @@ export const authOptions: AuthOptions = {
     signIn: "/auth/sign-in",
     error: "/auth/error",
   },
+  callbacks: {
+    session: ({ session, user }) => {
+      if (session?.user && user) {
+        session.user.id = user.id;
+      }
+
+      return session;
+    },
+  },
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID,
