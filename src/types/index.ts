@@ -11,7 +11,10 @@ export type ChatWithMessagesAndUsers = Chat & {
   messages: FullMessage[];
 };
 
-export type SeenEventPayload = Pick<FullMessage, "seen" | "seenIds" | "id">;
+export type SeenEventPayload = {
+  user: User;
+  id: string;
+};
 
 export type UpdateChatEventPayload = {
   id: string;

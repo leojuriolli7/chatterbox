@@ -59,12 +59,18 @@ export async function POST(request: Request, { params }: { params: Params }) {
       userToSend.chatIds = [];
       userToSend.seenMessageIds = [];
 
-      // update chat with new seen from lastMessage
-      await pusherServer.trigger(currentUser.email, "chat:updateSeen", {
+      const newLastMessage = {
         id: chatId,
         messageId: updatedMessage.id,
         currentUser: userToSend,
-      });
+      };
+
+      // update chat with new seen from lastMessage
+      await pusherServer.trigger(
+        currentUser.email,
+        "chat:updateSeen",
+        newLastMessage
+      );
     }
 
     // check if already read message
@@ -72,12 +78,18 @@ export async function POST(request: Request, { params }: { params: Params }) {
       return NextResponse.json(chat);
     }
 
-    // update message with new seen
-    await pusherServer.trigger(chatId, "message:update", {
-      seen: updatedMessage.seen,
-      seenIds: updatedMessage.seenIds,
+    const userToSend = {
+      ...currentUser,
+      seenMessageIds: [],
+      chatIds: [],
+    };
+
+    const newSeen = {
+      user: userToSend,
       id: updatedMessage.id,
-    });
+    };
+
+    await pusherServer.trigger(chatId, "message:update", newSeen);
 
     return NextResponse.json(updatedMessage);
   } catch (e) {

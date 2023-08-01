@@ -46,14 +46,14 @@ export default function ChatBox({
       });
     };
 
-    const updateMessageHandler = (newMessage: SeenEventPayload) => {
+    const updateMessageHandler = (payload: SeenEventPayload) => {
       setMessages((current) =>
         current.map((currentMessage) => {
-          if (currentMessage.id === newMessage.id)
+          if (currentMessage.id === payload.id)
             return {
               ...currentMessage,
-              seen: newMessage.seen,
-              seenIds: newMessage.seenIds,
+              seen: [...currentMessage.seen, payload.user],
+              seenIds: [...currentMessage.seenIds, payload.user.id],
             };
 
           return currentMessage;
