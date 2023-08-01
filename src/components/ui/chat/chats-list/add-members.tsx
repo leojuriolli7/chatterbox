@@ -117,7 +117,7 @@ export function AddMembers({ users }: { users: SelectableUser[] }) {
               onBlur={() => setOpen(false)}
               onFocus={() => setOpen(true)}
               placeholder="Select users..."
-              className="ml-2 bg-transparent outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-400 flex-1 md:text-sm text-base"
+              className="ml-2 bg-transparent outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-400 flex-1 md:text-sm text-base w-[100px]"
             />
           </div>
         </div>
