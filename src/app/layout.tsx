@@ -65,7 +65,7 @@ export default function RootLayout({
       <body
         className={cn(
           inter.className,
-          "h-[100dvh] overflow-y-auto mx-auto bg-white dark:bg-neutral-900"
+          "sm:h-screen h-[100dvh] overflow-y-auto mx-auto bg-white dark:bg-neutral-900"
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

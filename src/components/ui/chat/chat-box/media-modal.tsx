@@ -38,7 +38,7 @@ export default function ChatMediaModal() {
             <X className="text-white drop-shadow-2xl w-6 h-6" />
           </DialogPrimitiveClose>
 
-          <div className="max-w-[min(90vw,1000px)] max-h-[min(90dvh,1000px)] relative">
+          <div className="max-w-[min(90vw,1000px)] sm:max-h-[min(90vh, 1000px)] max-h-[min(90dvh,1000px)] relative">
             {media?.type === "image" && (
               <Image
                 src={media.url}
@@ -46,7 +46,7 @@ export default function ChatMediaModal() {
                 width="0"
                 height="0"
                 sizes="100vw"
-                className="max-w-[min(90vw,1000px)] max-h-[min(90dvh,1000px)] w-auto h-auto"
+                className="max-w-[min(90vw,1000px)] sm:max-h-[min(90vh, 1000px)] max-h-[min(90dvh,1000px)] w-auto h-auto"
               />
             )}
             {media?.type === "video" && (
