@@ -62,7 +62,6 @@ export default function ChatDetailsList({ isDrawerOpen, ...chat }: Props) {
         .then(async (res) => {
           if (res.ok) {
             const response = (await res.json()) as File[];
-            console.log("response:", response);
 
             const formattedFiles = response.map((file) => ({
               url: file.url,
