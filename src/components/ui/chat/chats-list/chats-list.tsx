@@ -2,17 +2,19 @@
 
 import useGetActiveChat from "@/hooks/useGetActiveChat";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import type { ChatWithMessagesAndUsers, UpdateChatEventPayload } from "@/types";
 import { UserPlus2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import ChatPreview from "./chat-preview";
 import type { User } from "@prisma/client";
-import CreateGroupDialogContent from "./create-group-dialog";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { pusherClient } from "@/lib/pusher";
+import Link from "next/link";
+import CreateGroupDialogContent from "./create-group-dialog";
 import { addNewLastMessage, updateSeenFromLastMessage } from "./utils";
+import ChatPreview from "./chat-preview";
 
 type Props = {
   initialChats: ChatWithMessagesAndUsers[];
@@ -27,6 +29,8 @@ export default function ChatsList({ initialChats, users }: Props) {
   const [chats, setChats] = useState(initialChats);
   const [createGroupOpen, setCreateGroupOpen] = useState(false);
   const chatsListRef = useRef<HTMLDivElement>(null);
+
+  const toggleChatModal = (value: boolean) => () => setCreateGroupOpen(value);
 
   const pusherKey = session?.user?.email;
 
@@ -116,6 +120,38 @@ export default function ChatsList({ initialChats, users }: Props) {
             />
           </Dialog>
         </div>
+
+        {!chats.length && (
+          <div className="w-full flex flex-col justify-center items-center mt-4">
+            <p className="mb-4 text-neutral-500">
+              You have no active chats yet.
+            </p>
+            <Link className="underline text-blue-500 w-full" href="/users">
+              <Button variant="brand" type="button" className="w-full">
+                Start a chat with a user
+              </Button>
+            </Link>
+            <div className="relative w-full my-3">
+              <div className="absolute inset-0 items-center flex">
+                <div className="w-full border-t border-neutral-200 dark:border-neutral-700" />
+              </div>
+
+              <div className="relative flex justify-center text-sm">
+                <span className="bg-white dark:bg-neutral-925 px-2 text-neutral-400 dark:text-neutral-400">
+                  or
+                </span>
+              </div>
+            </div>
+            <Button
+              variant="brand"
+              type="button"
+              onClick={toggleChatModal(true)}
+              className="w-full"
+            >
+              Start a group chat
+            </Button>
+          </div>
+        )}
 
         {chats.map((chat) => (
           <ChatPreview key={chat.id} {...chat} selected={chatId === chat.id} />
