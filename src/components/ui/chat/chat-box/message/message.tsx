@@ -10,6 +10,7 @@ import { formatNames } from "@/lib/format-names";
 type Props = FullMessage & {
   isLast: boolean;
   canRenderAuthor: boolean;
+  canRenderArrow: boolean;
 };
 
 function Message({
@@ -19,6 +20,7 @@ function Message({
   files,
   body,
   canRenderAuthor,
+  canRenderArrow,
   ...message
 }: Props) {
   const { data: session } = useSession();
@@ -77,7 +79,7 @@ function Message({
             isOwnMessage
               ? "bg-blue-500 text-white after:bg-blue-500 after:right-0 after:rounded-bl-full"
               : "bg-neutral-100 dark:bg-neutral-700 after:bg-neutral-100 after:dark:bg-neutral-700 after:left-0 after:rounded-br-full",
-            canRenderAuthor &&
+            canRenderArrow &&
               "after:content-[''] after:absolute after:top-0 after:w-[17px] after:h-[17px]"
           )}
         >

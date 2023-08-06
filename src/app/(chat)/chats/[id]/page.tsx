@@ -21,7 +21,7 @@ export default async function SingleChatPage({ params: { id } }: RouteParams) {
     <div className="lg:pl-80 h-full">
       <div className="h-full flex flex-col">
         <Header {...chat} />
-        <ChatBox initialMessages={messages} />
+        <ChatBox initialMessages={messages} isGroup={chat.isGroup} />
         <ChatInputBar />
       </div>
     </div>

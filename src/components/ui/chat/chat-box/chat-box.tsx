@@ -12,8 +12,10 @@ import ChatMediaModal from "./media-modal";
 
 export default function ChatBox({
   initialMessages,
+  isGroup,
 }: {
   initialMessages: FullMessage[];
+  isGroup: boolean | null;
 }) {
   const [messages, setMessages] = useState(initialMessages);
   const [hasNewMessage, setHasNewMessage] = useState(false);
@@ -131,13 +133,14 @@ export default function ChatBox({
         const isLastMessageAuthor =
           !!lastMessage && lastMessage?.sender.id === message?.sender.id;
 
-        const canRenderAuthor = !isLastMessageAuthor || !lastMessage;
+        const canRenderAuhorAndArrow = !isLastMessageAuthor || !lastMessage;
 
         return (
           <Message
             isLast={i === messages.length - 1}
             key={message.id}
-            canRenderAuthor={canRenderAuthor}
+            canRenderAuthor={canRenderAuhorAndArrow && isGroup === true}
+            canRenderArrow={canRenderAuhorAndArrow}
             {...message}
           />
         );
