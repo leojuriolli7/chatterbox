@@ -42,18 +42,20 @@ function Message({
   return (
     <div
       className={cn(
-        "flex gap-3 pt-2",
+        "flex sm:gap-3 gap-2 pt-2",
         isOwnMessage && "justify-end",
         isLast && "pb-2"
       )}
     >
-      <div className={cn("h-10 w-10", isOwnMessage && "order-2")}>
-        {canRenderAuthor && <ChatAvatar {...sender} />}
+      <div className={cn("sm:h-10 sm:w-10 w-7 h-7", isOwnMessage && "order-2")}>
+        {canRenderAuthor && (
+          <ChatAvatar className="sm:h-10 sm:w-10 w-7 h-7" {...sender} />
+        )}
       </div>
 
       <div
         className={cn(
-          "flex flex-col gap-2 max-w-[min(80%,600px)]",
+          "flex flex-col sm:gap-2 gap-1 max-w-[min(80%,600px)]",
           isOwnMessage && "items-end"
         )}
       >
