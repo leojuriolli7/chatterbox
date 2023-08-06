@@ -57,7 +57,7 @@ function Message({
 
       <div
         className={cn(
-          "flex flex-col sm:gap-2 gap-1 max-w-[min(80%,600px)]",
+          "flex flex-col sm:gap-2 gap-1 max-w-[min(65%,600px)]",
           isOwnMessage && "items-end"
         )}
       >
