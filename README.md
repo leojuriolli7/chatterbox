@@ -60,18 +60,19 @@ ESLint is also configured with strict rules to ensure code quality and minimize 
 5. "Today", "Yesterday", etc. indicators
 6. Search channels and users
 7. Delete messages
-8. Leaving GCs
-9. Keyboard events on chat input
-10. Change password in settings modal
-11. Forgot password flow with `nodemailer`
-12. **Bugfix**: Videos not showing on iOS
-13. Invite new users to group chat
-14. Mute chats
-15. Infinite scrolling inside chats and on user/chat list
-16. Experiment converting API Routes to server actions (e.g: delete chat)
-17. Search messages
-18. Reading old messages indicator
-19. Reply
-20. Reactions
-21. Gifs
-22. Mentions
+8. Send links
+9. Leaving GCs
+10. Keyboard events on chat input
+11. Change password in settings modal
+12. Forgot password flow with `nodemailer`
+13. **Bugfix**: Videos not showing on iOS
+14. Invite new users to group chat
+15. Mute chats
+16. Infinite scrolling inside chats and on user/chat list
+17. Experiment converting API Routes to server actions (e.g: delete chat)
+18. Search messages
+19. Reading old messages indicator
+20. Reply
+21. Reactions
+22. Gifs
+23. Mentions

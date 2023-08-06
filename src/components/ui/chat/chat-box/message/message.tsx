@@ -51,7 +51,12 @@ function Message({
         {canRenderAuthor && <ChatAvatar {...sender} />}
       </div>
 
-      <div className={cn("flex flex-col gap-2", isOwnMessage && "items-end")}>
+      <div
+        className={cn(
+          "flex flex-col gap-2 max-w-[min(80%,600px)]",
+          isOwnMessage && "items-end"
+        )}
+      >
         {canRenderAuthor && (
           <div className="flex items-center gap-1">
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
@@ -66,11 +71,10 @@ function Message({
 
         <div
           className={cn(
-            "text-sm w-fit break-words relative py-2 px-3",
+            "text-sm w-fit break-words relative py-2 px-3 rounded-[7.5px]",
             isOwnMessage
               ? "bg-blue-500 text-white after:bg-blue-500 after:right-0 after:rounded-bl-full"
               : "bg-neutral-100 dark:bg-neutral-700 after:bg-neutral-100 after:dark:bg-neutral-700 after:left-0 after:rounded-br-full",
-            hasFiles ? "rounded-md" : "rounded-full",
             canRenderAuthor &&
               "after:content-[''] after:absolute after:top-0 after:w-[17px] after:h-[17px]"
           )}
