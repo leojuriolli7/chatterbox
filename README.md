@@ -10,7 +10,7 @@ The UI is updated in realtime. Meaning when a channel is created by another user
 
 ## Tech stack
 
-- Next.js 13
+- Next.js 13 and Typescript
 - [Pusher](https://pusher.com/) for realtime updates.
 - [Prisma](https://www.prisma.io/) for ORM.
 - [Next Auth](https://next-auth.js.org/) for authentication with Github or Email.
