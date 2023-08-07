@@ -89,7 +89,7 @@ function Message({
         >
           {hasFiles && <MediaMessage files={files} />}
           <div className={cn(hasFiles && "mt-2")}>
-            {body && <span>{body}</span>}
+            {body && <span style={{ wordBreak: "break-word" }}>{body}</span>}
 
             <span
               className={cn(
