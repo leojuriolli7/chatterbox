@@ -52,7 +52,7 @@ export default function ChatPreview({ selected, ...chat }: Props) {
 
     if (!!last?.body) return getText(last.body);
 
-    if (!!last?.files) return getText("Sent files");
+    if (!!last?.files) return getText("📷 Sent media");
 
     return "Started a chat";
   }, [last, session, chat?.isGroup]);

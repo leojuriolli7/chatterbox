@@ -73,6 +73,7 @@ export async function POST(request: Request) {
         messages: {
           include: {
             seen: true,
+            files: true,
           },
         },
       },

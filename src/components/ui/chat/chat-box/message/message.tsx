@@ -9,12 +9,14 @@ import { formatNames } from "@/lib/format-names";
 
 type Props = FullMessage & {
   isLast: boolean;
+  isGroup: boolean;
   canRenderAuthor: boolean;
   canRenderArrow: boolean;
 };
 
 function Message({
   isLast,
+  isGroup,
   sender,
   seen,
   files,
@@ -49,9 +51,15 @@ function Message({
         isLast && "pb-2"
       )}
     >
-      <div className={cn("sm:h-10 sm:w-10 w-7 h-7", isOwnMessage && "order-2")}>
+      <div
+        className={cn(
+          "sm:h-10 sm:w-10",
+          isGroup ? "w-7 h-7" : "w-0 h-0",
+          isOwnMessage && "order-2"
+        )}
+      >
         {canRenderAuthor && (
-          <ChatAvatar className="sm:h-10 sm:w-10 w-7 h-7" {...sender} />
+          <ChatAvatar className="w-full h-full" {...sender} />
         )}
       </div>
 
@@ -65,10 +73,6 @@ function Message({
           <div className="flex items-center gap-1">
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
               {sender.name}
-            </p>
-
-            <p className="text-xs text-neutral-400 dark:text-neutral-500">
-              {format(new Date(message.createdAt), "p")}
             </p>
           </div>
         )}
@@ -84,7 +88,18 @@ function Message({
           )}
         >
           {hasFiles && <MediaMessage files={files} />}
-          {body && <p className={cn(hasFiles && "mt-2")}>{body}</p>}
+          <div className={cn(hasFiles && "mt-2")}>
+            {body && <span>{body}</span>}
+
+            <span
+              className={cn(
+                "text-[11px] float-right mt-[6px] ml-2 -mr-1 leading-4",
+                isOwnMessage ? "text-sky-200" : "text-neutral-400"
+              )}
+            >
+              {format(new Date(message.createdAt), "HH:mm")}
+            </span>
+          </div>
         </div>
         {isLast && isOwnMessage && seenList.length > 0 && (
           <p className="text-xs font-light text-neutral-500">

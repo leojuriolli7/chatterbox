@@ -36,7 +36,8 @@ function MediaMessage({ files }: { files: File[] }) {
   return (
     <div
       className={cn(
-        numberOfFiles === 3 && "flex gap-2 items-center flex-wrap",
+        (numberOfFiles === 2 || numberOfFiles === 3) &&
+          "flex gap-2 items-center flex-wrap",
         numberOfFiles === 4 && "grid grid-cols-2 grid-rows-2 gap-2"
       )}
     >
@@ -44,7 +45,7 @@ function MediaMessage({ files }: { files: File[] }) {
         const isSingleMedia = numberOfFiles === 1;
 
         const mediaClassName = cn(
-          "cursor-pointer hover:opacity-90",
+          "cursor-pointer hover:opacity-90 shadow-sm",
           isSingleMedia ? singleMediaClass : mediumMediaClass
         );
 

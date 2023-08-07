@@ -140,6 +140,7 @@ export default function ChatBox({
             isLast={i === messages.length - 1}
             key={message.id}
             canRenderAuthor={canRenderAuhorAndArrow && isGroup === true}
+            isGroup={isGroup || false}
             canRenderArrow={canRenderAuhorAndArrow}
             {...message}
           />
