@@ -97,7 +97,7 @@ export default function ChatInputBar() {
             size="icon"
             variant="ghost"
             loading={loading}
-            className="h-9 w-9 bg-blue-500 hover:bg-blue-600 transition rounded-full shrink-0"
+            className="h-9 w-9 bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-600 transition rounded-full shrink-0"
             loaderClasses="text-white"
             disabled={!message && !files?.length}
           >
