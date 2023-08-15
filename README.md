@@ -62,19 +62,20 @@ ESLint is also configured with strict rules to ensure code quality and minimize 
 7. Open user details on click in GCs
 8. Search channels and users
 9. Delete messages
-10. Send links (scraping - metascraper)
-11. Leaving GCs
-12. Keyboard events on chat input
-13. Change password in settings modal
-14. Forgot password flow with `nodemailer`
-15. **Bugfix**: Videos not showing on iOS
-16. Invite new users to group chat
-17. Mute chats
-18. Infinite scrolling inside chats and on user/chat list
-19. Experiment converting API Routes to server actions (e.g: delete chat)
-20. Search messages
-21. Reading old messages indicator
-22. Reply
-23. Reactions
-24. Gifs
-25. Mentions
+10. Send links (scraping - metascraper and autolinking)
+11. Unread counters (In chats and general)
+12. Leaving GCs
+13. Keyboard events on chat input
+14. Change password in settings modal
+15. Forgot password flow with `nodemailer`
+16. **Bugfix**: Videos not showing on iOS
+17. Invite new users to group chat
+18. Mute chats
+19. Infinite scrolling inside chats and on user/chat list
+20. Experiment converting API Routes to server actions (e.g: delete chat)
+21. Search messages
+22. Reading old messages indicator
+23. Reply
+24. Reactions
+25. Gifs
+26. Mentions
