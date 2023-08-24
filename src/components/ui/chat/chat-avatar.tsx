@@ -24,7 +24,7 @@ export default function ChatAvatar({
   const canRenderActiveStatus = alwaysOnline === true || isActive;
 
   return (
-    <div className="relative">
+    <div className="relative h-[inherit]">
       <Avatar className={className}>
         <AvatarImage src={image || undefined} />
         <AvatarFallback>{name}</AvatarFallback>
